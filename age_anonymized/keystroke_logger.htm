@@ -1,0 +1,101 @@
+<html><title>Keystroke logger</title><body>
+<!-- interface -->
+
+<style>
+table{width:100%;height:100%;} 
+textarea{width:100%;height:100%}
+</style>
+<table><tr><td>
+<textarea placeholder="type something here" autofocus></textarea>
+</td><td>
+<textarea id="logs1" placeholder="key logs will appear here"></textarea>
+</td><td>
+<textarea id="logs2" placeholder="key logs will appear here"></textarea>
+</td></tr></table>
+
+<!-- end of interface -->
+
+<script>
+/* 
+Simplified version of keylog script, 
+that logs for each key the following data triple:
+
+ 1) keycode (note, that event.keyCode property is now deprecated, but still supported, you can use event.key instead), 
+ 2) hold time (keyup time-keydown time), 
+ 3) and the seek time (this keydown time - last key release time). 
+
+For support of any browser, and
+mobile devices, some modification are needed, 
+that are let out here for the sake of clarity.
+
+It is important to notice that data are logged here with 
+keyup event. This prevents negative seek time, but in the 
+same time makes possible that the log order and 
+actual print out order are not the same. 
+
+*/
+
+log1=[];
+
+function keyD(event){
+  lL=log1.length;
+  K=event.keyCode;
+  dT=new Date().getTime(); // keydown time
+  if(lL > 0 && log1[lL-1][0] == K && log1[lL-1][1] == 'dn'){
+    log1.push([K, 'up', dT]); /* adding artificially 'up' event log,
+                               if it does not fire normally */
+  }
+  log1.push([K, 'dn', dT]);
+  logs1.value=log1.join('\n');
+}
+
+function keyU(event){
+  K=event.keyCode; 
+  uT=new Date().getTime(); 
+  log1.push([K, 'up', uT]);
+  logs1.value=log1.join('\n');
+  conv(log1);
+}
+
+function conv(arr){
+log2=[];
+ for(i=0;i<arr.length;i++){
+   if(arr[i][1] == 'dn'){
+     keyCode=arr[i][0];
+     log2.push([keyCode, hold(arr,i), seek(arr,i)]);
+   }
+ }
+ logs2.value=log2.join('\n');
+}
+
+function seek(arr,i){
+ dT = arr[i][2];
+ if(i == 0) Seek = 0;
+   for(j = i - 1; j >= 0; j--){
+     if(arr[j][1] == 'dn'){
+       down2down = dT - arr[j][2];
+       Seek = down2down - hold(arr,j);
+       break;
+     }
+   }
+  return Seek;
+}
+
+function hold(arr, i){
+     K = arr[i][0];
+     dT = arr[i][2];
+     for(j = i + 1; j < arr.length; j++){
+       if(arr[j][0] == K && arr[j][1] == 'up'){
+            Hold = arr[j][2] - dT;
+            break;
+       }
+     }
+ return Hold;
+}
+
+addEventListener('keydown',keyD);
+addEventListener('keyup',keyU);
+
+</script>
+</body>
+</html>
