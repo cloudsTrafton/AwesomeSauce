@@ -2,6 +2,7 @@
 # import arff
 
 import os.path
+import matplotlib.pyplot as plt
 
 # assume no more than 64-bit keycodes
 def prettyNgram(keycodes):
@@ -20,7 +21,11 @@ debugging = False
 # Rank of N-gram we use for features.
 # This is the number of consecutive characters typed that we measure
 # Needs to be 4 or less.
-ngram = 2
+ngram = 3
+
+# Discard outliers with extreme hold and seek times
+discardHoldTime = 400
+discardSeekTime = 10000
 
 # ngramNameMask - only want the lower 8*ngram bits for the name
 if ngram == 1:
@@ -37,7 +42,7 @@ datasetRoot = './age_anonymized/'
 datasetFolders = [datasetRoot + '-15/', datasetRoot + '16-19/', datasetRoot + '20-29/', \
                  datasetRoot + '30-39/', datasetRoot + '40-49/', datasetRoot + '50+/']
 
-#datasetFolders = [datasetRoot + 'test/']
+#datasetFolders = [datasetRoot + '-15/']
 
 print("Reading files in: ", datasetFolders)
 print("Found the following raw dataset files:")
@@ -54,7 +59,9 @@ ngramVectors = []
 holdtimeVectors = []
 seektimeVectors = []
 featureVectors = []
+discardedUsers = []
 userCount = 0
+discardCount = 0
 
 print("Processing into feature vectors...")
 for file in fileList:
@@ -117,26 +124,50 @@ for file in fileList:
 
         averageHoldTime = totalHoldTime / keystrokeCount
         averageSeekTime = totalSeekTime / keystrokeCount
-        averageNgramTime = totalNgramTime / ngramCount
-        print('User Data:', userCount)
-        print('Found ngrams for user: ', ngramVector)
-        print('User average hold time: ', int(averageHoldTime), 'ms')
-        print('User average seek time: ', int(averageSeekTime), 'ms')
-        print('User average ngram time: ', int(averageNgramTime), 'ms (n-gram of', ngram, ')')
-        ngramVectors.append(ngramVector)
 
-        featureVector.append(userCount)
-        featureVector.append(int(averageHoldTime))
-        featureVector.append(int(averageSeekTime))
-        featureVector.append(int(averageNgramTime))
+        if ngramCount > 0:
+            averageNgramTime = totalNgramTime / ngramCount
+        else:
+            averageNgramTime = 0
 
-        featureVectors.append(featureVector)
+        #discard outliers
+        if(averageHoldTime < discardHoldTime and averageSeekTime < discardSeekTime and averageNgramTime > 0):
+
+            print('User Data:', userCount)
+            print('Found ngrams for user: ', ngramVector)
+            print('User average hold time: ', int(averageHoldTime), 'ms')
+            print('User average seek time: ', int(averageSeekTime), 'ms')
+            print('User average ngram time: ', int(averageNgramTime), 'ms (n-gram of', ngram, ')')
+            ngramVectors.append(ngramVector)
+
+            featureVector.append(userCount)
+            featureVector.append(int(averageHoldTime))
+            featureVector.append(int(averageSeekTime))
+            featureVector.append(int(averageNgramTime))
+
+            featureVectors.append(featureVector)
+        else:
+            print('--- DISCARDING DATA ---')
+            print('Found ngrams for user: ', ngramVector)
+            print('User average hold time: ', int(averageHoldTime), 'ms')
+            print('User average seek time: ', int(averageSeekTime), 'ms')
+            print('User average ngram time: ', int(averageNgramTime), 'ms (n-gram of', ngram, ')')
+            discardedUsers.append(userCount)
+            discardCount += 1
+
         userCount += 1
 
 print("K-Means Clustering Algorithm by Team Awesomesauce")
-
+print("Discarded ", discardCount, " data points: ", discardedUsers)
 print("Using Feature Vectors: ")
 print(featureVectors)
+
+#plt.scatter(featureVectors[0][1], featureVectors[0][2], c='white', marker='o', edgecolor='black', s=50)
+plt.scatter([item[2] for item in featureVectors], [item[1] for item in featureVectors], c='white', marker='.', edgecolor='black', s=50)
+
+plt.grid()
+
+plt.show()
 
 #data = arff.load(open('data_-15_16-19_256.arff'), 'rb')
 
