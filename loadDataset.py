@@ -33,11 +33,11 @@ elif ngram == 4:
     ngramNameMask = 0xFFFFFFFF
 
 
-datasetRoot = '../../Datasets/age_anonymized/'
-#datasetFolders = [datasetRoot + '-15/', datasetRoot + '16-19/', datasetRoot + '20-29/', \
-#                 datasetRoot + '30-39/', datasetRoot + '40-49/', datasetRoot + '50+/']
+datasetRoot = './age_anonymized/'
+datasetFolders = [datasetRoot + '-15/', datasetRoot + '16-19/', datasetRoot + '20-29/', \
+                 datasetRoot + '30-39/', datasetRoot + '40-49/', datasetRoot + '50+/']
 
-datasetFolders = [datasetRoot + 'test/']
+#datasetFolders = [datasetRoot + 'test/']
 
 print("Reading files in: ", datasetFolders)
 print("Found the following raw dataset files:")
@@ -53,6 +53,7 @@ for folder in datasetFolders:
 ngramVectors = []
 holdtimeVectors = []
 seektimeVectors = []
+featureVectors = []
 userCount = 0
 
 print("Processing into feature vectors...")
@@ -77,7 +78,7 @@ for file in fileList:
         #keyCode = []
         #holdTime = []
         #seekTime = []
-
+        featureVector = []
         ngramVector = {}                            # Dictionary containing all these ngram features
         ngramName = ngram * [0]                     # The column of this feature will be
                                                     # the three keycodes concatenated together.
@@ -88,6 +89,9 @@ for file in fileList:
             n = n % ngram                           # need to keep #ngram counters running
             row = line.strip().split(',')
             if debugging: print(hex(int(row[0])), row)
+
+            if(len(row[0]) == 0 or len(row[1]) == 0 or len(row[2]) == 0): continue
+
             keyCode = int(row[0])                   # keycode (ASCII)
             holdTime = int(row[1])                  # how long we hold this key down
             seekTime = int(row[2])                  # delay between release of previous key and this press
@@ -102,7 +106,7 @@ for file in fileList:
                 if i == n and keystrokeCount >= ngram:
                     ngramVector[ngramName[i]] = ngramDuration[i]
                     totalNgramTime += ngramDuration[i]
-                    print('Found nGram ', hex(ngramName[i]), '(', prettyNgram(ngramName[i]), ')', ' duration: ', ngramDuration[i])
+                    if debugging: print('Found nGram ', hex(ngramName[i]), '(', prettyNgram(ngramName[i]), ')', ' duration: ', ngramDuration[i])
                     ngramCount += 1
                     ngramName[i] = 0                        # reset this feature
                     ngramDuration[i] = 0
@@ -120,11 +124,20 @@ for file in fileList:
         print('User average seek time: ', int(averageSeekTime), 'ms')
         print('User average ngram time: ', int(averageNgramTime), 'ms (n-gram of', ngram, ')')
         ngramVectors.append(ngramVector)
+
+        featureVector.append(userCount)
+        featureVector.append(int(averageHoldTime))
+        featureVector.append(int(averageSeekTime))
+        featureVector.append(int(averageNgramTime))
+
+        featureVectors.append(featureVector)
         userCount += 1
 
-
-
 print("K-Means Clustering Algorithm by Team Awesomesauce")
+
+print("Using Feature Vectors: ")
+print(featureVectors)
+
 #data = arff.load(open('data_-15_16-19_256.arff'), 'rb')
 
 #print(data)
