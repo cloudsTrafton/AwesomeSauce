@@ -1,10 +1,12 @@
 import pandas as pd
 import seaborn as sb
 import matplotlib.pyplot as plt
+import matplotlib.markers as markers
 import os
 
 
 # Provides utilities for processing data, including.
+# Authors: Jon Andrew and Claudia Trafton
 # Authored: 11/17/2019
 
 # ---- Important Globally Used Variables ----
@@ -82,34 +84,31 @@ def readAgeDataSet(keepLabel):
         print(dataSet)
     return dataSet
 
-# Plots data using seaborn and matplotlib. Wraps this utilitiy to a generalized method.
-# def plotData(X):
-#     plt.scatter(X[result == 0, 0],
-#                 X[result == 0, 1],
-#                 s=50, c='lightgreen',
-#                 marker='s', edgecolor='black',
-#                 label='cluster 1')
-#     plt.scatter(X[result == 1, 0],
-#                 X[result == 1, 1],
-#                 s=50, c='orange',
-#                 marker='o', edgecolor='black',
-#                 label='cluster 2')
-#     plt.scatter(X[result == 2, 0],
-#                 X[result == 2, 1],
-#                 s=50, c='blue',
-#                 marker='v', edgecolor='black',
-#                 label='cluster 3')
-#     plt.scatter(X[result == 3, 0],
-#                 X[result == 3, 1],
-#                 s=50, c='yellow',
-#                 marker='D', edgecolor='black',
-#                 label='cluster 4')
-#     plt.scatter(X[result == 4, 0],
-#                 X[result == 4, 1],
-#                 s=50, c='orange',
-#                 marker='h', edgecolor='black',
-#                 label='cluster 5')
 
-readAgeDataSet(False)
+# Generalized function to plot results. Iterates through ever cluster and
+# puts the points on the scatterplot per cluster in order
+# Parameters:
+# X : the results of the kMeans clustering
+# result:
+# numberOfClusters: the number of clustered generated from KMeans
+# useDataLabel: boolean to describe whether or not the original label on the data point is being used.
+# this label indicates what age group it belonged to originally and can alll=ow for accuracy spotchecks
+def plotClusteredResults(X, result, numberOfClusters, useDataLabels):
+    colors = ['lightgreen', 'orange', 'blue', 'yellow', 'orange']
+    markers = ['s', 'p', '^', 'o', '*']
+    for cluster in range(1, numberOfClusters):
+        if (useDataLabels):
+            #TODO set the data mark according to the label - need to figure out how to do that
+            mark = 's'
+        else:
+            mark = 's'
+        plt.scatter(X[result == cluster-1, 1],
+                    X[result == cluster-1, 2],
+                    s=50, c=colors[cluster],
+                    marker=mark, edgecolor='black',
+                    label='cluster ' + str(cluster))
+    return plt
+
+
 
 

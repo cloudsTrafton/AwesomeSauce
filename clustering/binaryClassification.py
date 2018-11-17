@@ -32,34 +32,7 @@ nGramDataCopy = X
 kmeans = KMeans(init='k-means++', n_clusters=5, n_init=10, max_iter=300, tol=1e-04, random_state=0)
 result = kmeans.fit_predict(X)
 print(result)
-plt.scatter(X[result == 0, 1],
-            X[result == 0, 2],
-            s=50, c='lightgreen',
-            marker='s', edgecolor='black',
-            label='cluster 1')
-plt.scatter(X[result == 1, 1],
-            X[result == 1, 2],
-            s=50, c='orange',
-            marker='o', edgecolor='black',
-            label='cluster 2')
-plt.scatter(X[result == 2, 1],
-            X[result == 2, 2],
-            s=50, c='blue',
-            marker='v', edgecolor='black',
-            label='cluster 3')
-plt.scatter(X[result == 3, 1],
-            X[result == 3, 2],
-            s=50, c='yellow',
-            marker='D', edgecolor='black',
-            label='cluster 4')
-plt.scatter(X[result == 4, 1],
-            X[result == 4, 2],
-            s=50, c='orange',
-            marker='h', edgecolor='black',
-            label='cluster 5')
-
-#result = kmeans.fit_predict(X[result == 0, 0])
-
+plt = dataUtils.plotClusteredResults(X, result, 5, False)
 plt.legend(scatterpoints=1)
 plt.grid()
 plt.show()
