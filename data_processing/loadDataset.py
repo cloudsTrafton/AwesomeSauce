@@ -1,8 +1,9 @@
 # from module liac-arff
 # import arff
-
+import data_processing.dataUtils as dataUtils
 import os.path
 import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
 
 # assume no more than 64-bit keycodes
 def prettyNgram(keycodes):
@@ -24,7 +25,7 @@ debugging = False
 ngram = 3
 
 # Discard outliers with extreme hold and seek times
-discardHoldTime = 400
+discardHoldTime = 200
 discardSeekTime = 10000
 
 # ngramNameMask - only want the lower 8*ngram bits for the name
@@ -38,7 +39,7 @@ elif ngram == 4:
     ngramNameMask = 0xFFFFFFFF
 
 
-datasetRoot = './age_anonymized/'
+datasetRoot = '../age_anonymized/'
 datasetFolders = [datasetRoot + '-15/', datasetRoot + '16-19/', datasetRoot + '20-29/', \
                  datasetRoot + '30-39/', datasetRoot + '40-49/', datasetRoot + '50+/']
 
@@ -161,13 +162,9 @@ print("K-Means Clustering Algorithm by Team Awesomesauce")
 print("Discarded ", discardCount, " data points: ", discardedUsers)
 print("Using Feature Vectors: ")
 print(featureVectors)
+print("Exporting to CSV")
+dataUtils.generateFeatureCsv(featureVectors,"jonstest",['userID','avgHoldTime','avgSeekTime','averageNgramTime'])
 
-#plt.scatter(featureVectors[0][1], featureVectors[0][2], c='white', marker='o', edgecolor='black', s=50)
-plt.scatter([item[2] for item in featureVectors], [item[1] for item in featureVectors], c='white', marker='.', edgecolor='black', s=50)
-
-plt.grid()
-
-plt.show()
 
 #data = arff.load(open('data_-15_16-19_256.arff'), 'rb')
 
