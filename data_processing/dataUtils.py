@@ -1,10 +1,38 @@
 import pandas as pd
 import seaborn as sb
 import matplotlib.pyplot as plt
+import os
 
 
 # Provides utilities for processing data, including.
 # Authored: 11/17/2019
+
+# ---- Important Globally Used Variables ----
+
+global datasetRoot
+global datasetFolders
+global dataSetLabels
+
+datasetRoot = '../age_anonymized/'
+datasetFolders = [datasetRoot + '-15/', datasetRoot + '16-19/', datasetRoot + '20-29/', \
+                  datasetRoot + '30-39/', datasetRoot + '40-49/', datasetRoot + '50+/']
+
+
+# The labels (i.e. which age group the datapoint belongs to)
+#Key: the folder name it belongs to
+#Value: the integer indicating the group number
+# Group 1: 0-15
+# Group 2: 16-19
+# Group 3: 20-29
+# Group 4: 30-39
+# Group 5: 40-49
+# Group 6: 50+
+dataSetLabels = {datasetFolders[0]: 0, datasetFolders[1]: 1, datasetFolders[2]: 2,
+                 datasetFolders[3]: 3, datasetFolders[4]: 4, datasetFolders[5]: 5}
+
+# ---- End Important Globally Used Variables ----
+
+
 
 
 # Writes the features to a CSV file.
@@ -26,7 +54,6 @@ def generateFeatureCsv(featureVectorsArray, fileName, labels):
 # Loads a CSV file as a Pandas dataframe
 def retreiveDataSet(path):
     data = pd.read_csv(path)
-    print(data)
     return data
 
 # Turns a list into a comma seperated string
@@ -34,16 +61,55 @@ def retreiveDataSet(path):
 # list: a list type
 # returns: a string of comma seperated values
 def cleanListString(list):
-    return str(list).replace("[", "").replace("]", "")
+    return str(list).replace("[", "").replace("]", "").replace("\n", "")
+
+
+
+# Reads in the dataset from the
+def readAgeDataSet(keepLabel):
+    print("Reading files in: ", datasetFolders)
+    print("Found the following raw dataset files:")
+    dataSet = []
+    for folder in datasetFolders:
+        files = os.listdir(folder)
+        for file in files:
+            with open(folder + file, "r") as f:
+                for line in f:
+                    row = cleanListString(line)
+                    if keepLabel:
+                        row = row + "," + str(dataSetLabels.get(str(folder)))
+                    dataSet.append(row)
+        print(dataSet)
+    return dataSet
 
 # Plots data using seaborn and matplotlib. Wraps this utilitiy to a generalized method.
-def plotData(xLabel, yLabel, res):
-    sb.lmplot(xLabel, yLabel,
-               data=res,
-               fit_reg=False,
-               hue="clusters")
+# def plotData(X):
+#     plt.scatter(X[result == 0, 0],
+#                 X[result == 0, 1],
+#                 s=50, c='lightgreen',
+#                 marker='s', edgecolor='black',
+#                 label='cluster 1')
+#     plt.scatter(X[result == 1, 0],
+#                 X[result == 1, 1],
+#                 s=50, c='orange',
+#                 marker='o', edgecolor='black',
+#                 label='cluster 2')
+#     plt.scatter(X[result == 2, 0],
+#                 X[result == 2, 1],
+#                 s=50, c='blue',
+#                 marker='v', edgecolor='black',
+#                 label='cluster 3')
+#     plt.scatter(X[result == 3, 0],
+#                 X[result == 3, 1],
+#                 s=50, c='yellow',
+#                 marker='D', edgecolor='black',
+#                 label='cluster 4')
+#     plt.scatter(X[result == 4, 0],
+#                 X[result == 4, 1],
+#                 s=50, c='orange',
+#                 marker='h', edgecolor='black',
+#                 label='cluster 5')
 
-     # Scatter plot
-    plt.title("Clusters " + xLabel + " vs " + yLabel)
-    plt.xlabel(xLabel)
-    plt.ylabel(yLabel)
+readAgeDataSet(False)
+
+
