@@ -55,8 +55,8 @@ def generateFeatureCsv(featureVectorsArray, fileName, labels):
 
 # Loads a CSV file as a Pandas dataframe
 def retreiveDataSet(path):
-    data = pd.read_csv(path)
-    return data
+    data = pd.read_csv(path, index_col=0)
+    return pd.DataFrame(data)
 
 # Turns a list into a comma seperated string
 # Parameters:
@@ -65,9 +65,10 @@ def retreiveDataSet(path):
 def cleanListString(list):
     return str(list).replace("[", "").replace("]", "").replace("\n", "")
 
-
-
-# Reads in the dataset from the
+# Reads in the entire dataset.
+# Parameters:
+# keepLabel: A boolean that toggles whether or not the original label will be kept (which age group it belongs to)
+# returns: A list of lists. The sublists each represent an individual file
 def readAgeDataSet(keepLabel):
     print("Reading files in: ", datasetFolders)
     print("Found the following raw dataset files:")
@@ -75,13 +76,17 @@ def readAgeDataSet(keepLabel):
     for folder in datasetFolders:
         files = os.listdir(folder)
         for file in files:
-            with open(folder + file, "r") as f:
-                for line in f:
-                    row = cleanListString(line)
-                    if keepLabel:
-                        row = row + "," + str(dataSetLabels.get(str(folder)))
-                    dataSet.append(row)
-        print(dataSet)
+            # This is here to be able to extract data by file, so that it can be read by file.
+            csvFile = []
+            fullName = os.path.join(folder, file)
+            if os.path.isfile(fullName) and file.endswith('.csv'):
+                with open(fullName, "r") as f:
+                    for line in f:
+                        row = cleanListString(line)
+                        if keepLabel:
+                            row = row + "," + str(dataSetLabels.get(str(folder)))
+                        csvFile.append(row)
+                dataSet.append(csvFile)
     return dataSet
 
 
@@ -97,16 +102,17 @@ def plotClusteredResults(X, result, numberOfClusters, useDataLabels):
     colors = ['lightgreen', 'orange', 'blue', 'yellow', 'orange']
     markers = ['s', 'p', '^', 'o', '*']
     for cluster in range(1, numberOfClusters):
-        if (useDataLabels):
-            #TODO set the data mark according to the label - need to figure out how to do that
-            mark = 's'
-        else:
-            mark = 's'
         plt.scatter(X[result == cluster-1, 1],
                     X[result == cluster-1, 2],
                     s=50, c=colors[cluster],
                     marker=mark, edgecolor='black',
                     label='cluster ' + str(cluster))
+    # if useDataLabels:
+    #     labels_list = list(dataSetLabels.values())
+    #     for point in enumerate(X):
+    #         print(point)
+    #         mark = markers[point[len(point) - 1]]
+    #         print(mark)
     return plt
 
 
