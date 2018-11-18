@@ -25,7 +25,7 @@ from sklearn.preprocessing import scale
 
 # -- Preliminary Trial for Clustering data based on the three features extracted as N-Grams -- #
 
-df1 = dataUtils.retreiveDataSet('../feature_sets/jonstest.csv').drop(columns=['\'userID\''])
+df1 = dataUtils.retreiveDataSet('../feature_sets/jonstest2.csv').drop(columns=['\'userID\''])
 
 #normalize the values
 df = df1.astype(float)
