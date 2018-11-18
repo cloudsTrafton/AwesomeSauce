@@ -6,13 +6,14 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
 # assume no more than 64-bit keycodes
+# was giving strange behavior with string comparisons
 def prettyNgram(keycodes):
     ret = ''
     ret += chr((keycodes & 0xFF000000) >> 24)
     ret += chr((keycodes & 0x00FF0000) >> 16)
     ret += chr((keycodes & 0x0000FF00) >> 8)
     ret += chr((keycodes & 0x000000FF))
-    return ret.strip()
+    return ret.strip('\0')
 
 #debugging = True
 debugging = False
@@ -22,7 +23,9 @@ debugging = False
 # Rank of N-gram we use for features.
 # This is the number of consecutive characters typed that we measure
 # Needs to be 4 or less.
-ngram = 3
+ngram = 2
+
+desiredNgrams = ['I ', 'AL', 'S ', 'KS', 'EI', 'D ', 'AK', 'L ', ' O', 'LE', 'MA', 'IN', 'SI', 'EL', 'E ', 'JA', 'LA']
 
 # Discard outliers with extreme hold and seek times
 discardHoldTime = 200
@@ -87,6 +90,11 @@ for file in fileList:
         #holdTime = []
         #seekTime = []
         featureVector = []
+
+        # special ngrams are those mentioned as having the highest age-based correlation
+        # using supervised learning. We want to capture those in our feature vector here.
+        specialNgramVector = len(desiredNgrams) * [0]
+
         ngramVector = {}                            # Dictionary containing all these ngram features
         ngramName = ngram * [0]                     # The column of this feature will be
                                                     # the three keycodes concatenated together.
@@ -114,14 +122,22 @@ for file in fileList:
                 if i == n and keystrokeCount >= ngram:
                     ngramVector[ngramName[i]] = ngramDuration[i]
                     totalNgramTime += ngramDuration[i]
-                    if debugging: print('Found nGram ', hex(ngramName[i]), '(', prettyNgram(ngramName[i]), ')', ' duration: ', ngramDuration[i])
+                    prettyNgramName = prettyNgram(ngramName[i])
+                    if debugging: print('Found nGram ', hex(ngramName[i]), '(', prettyNgramName, ')', ' duration: ', ngramDuration[i])
+                    #if n-gram in our list of desired ones, then add it to our feature vector.
+                    #TODO: should keep average of desired n-grams, for now, just update based on the last seen.
+
+                    if prettyNgramName in desiredNgrams:
+                        specialNgramVector[desiredNgrams.index(prettyNgramName)] = ngramDuration[i]
+                        if debugging: print('Found special nGram ', prettyNgramName)
+
                     ngramCount += 1
                     ngramName[i] = 0                        # reset this feature
                     ngramDuration[i] = 0
             n += 1
             keystrokeCount += 1
 
-            if debugging: input()
+            #if debugging: input()
 
         averageHoldTime = totalHoldTime / keystrokeCount
         averageSeekTime = totalSeekTime / keystrokeCount
@@ -134,8 +150,20 @@ for file in fileList:
         #discard outliers
         if(averageHoldTime < discardHoldTime and averageSeekTime < discardSeekTime and averageNgramTime > 0):
 
+            # Note: this just fills in the average ngram time of all ngrams if one is missing,
+            # may consider just discarding this user's data instead.
+            newSpecialNgramVector = []
+            for sp in specialNgramVector:
+                if sp == 0:
+                    newSpecialNgramVector.append(int(averageNgramTime))
+                else:
+                    newSpecialNgramVector.append(sp)
+
+            specialNgramVector = newSpecialNgramVector
+
             print('User Data:', userCount)
             print('Found ngrams for user: ', ngramVector)
+            print('Found special ngrams:', specialNgramVector)
             print('User average hold time: ', int(averageHoldTime), 'ms')
             print('User average seek time: ', int(averageSeekTime), 'ms')
             print('User average ngram time: ', int(averageNgramTime), 'ms (n-gram of', ngram, ')')
@@ -145,7 +173,7 @@ for file in fileList:
             featureVector.append(int(averageHoldTime))
             featureVector.append(int(averageSeekTime))
             featureVector.append(int(averageNgramTime))
-
+            featureVector.extend(specialNgramVector)
             featureVectors.append(featureVector)
         else:
             print('--- DISCARDING DATA ---')
@@ -160,10 +188,14 @@ for file in fileList:
 
 print("K-Means Clustering Algorithm by Team Awesomesauce")
 print("Discarded ", discardCount, " data points: ", discardedUsers)
+print("Included ", userCount - discardCount, " data points")
 print("Using Feature Vectors: ")
 print(featureVectors)
 print("Exporting to CSV")
-dataUtils.generateFeatureCsv(featureVectors,"jonstest",['userID','avgHoldTime','avgSeekTime','averageNgramTime'])
+
+columnLabels = ['userID','avgHoldTime','avgSeekTime','averageNgramTime']
+columnLabels.extend(desiredNgrams)
+dataUtils.generateFeatureCsv(featureVectors,"jonstest2",columnLabels)
 
 
 #data = arff.load(open('data_-15_16-19_256.arff'), 'rb')
