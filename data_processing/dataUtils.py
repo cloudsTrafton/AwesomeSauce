@@ -55,7 +55,7 @@ def generateFeatureCsv(featureVectorsArray, fileName, labels):
 
 # Loads a CSV file as a Pandas dataframe
 def retreiveDataSet(path):
-    data = pd.read_csv(path, index_col=0)
+    data = pd.read_csv(path)
     return pd.DataFrame(data)
 
 # Turns a list into a comma seperated string
@@ -105,7 +105,7 @@ def plotClusteredResults(X, result, numberOfClusters, useDataLabels):
         plt.scatter(X[result == cluster-1, 1],
                     X[result == cluster-1, 2],
                     s=50, c=colors[cluster],
-                    marker=mark, edgecolor='black',
+                    marker='s', edgecolor='black',
                     label='cluster ' + str(cluster))
     # if useDataLabels:
     #     labels_list = list(dataSetLabels.values())

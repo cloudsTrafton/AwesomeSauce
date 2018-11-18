@@ -49,7 +49,7 @@ datasetFolders = [datasetRoot + '-15/', datasetRoot + '16-19/', datasetRoot + '2
 #datasetFolders = [datasetRoot + '-15/']
 
 # Get the list of all files
-KEEP_LABELS = False
+KEEP_LABELS = True
 fileList = dataUtils.readAgeDataSet(KEEP_LABELS)
 
 ngramVectors = []
@@ -170,7 +170,7 @@ for file in fileList:
         featureVector.append(int(averageNgramTime))
         featureVector.extend(specialNgramVector)
         if KEEP_LABELS:
-            featureVector.append(label) # Add the label to the feature vectors
+            featureVector.append(int(label)) # Add the label to the feature vectors
         print("Length of feature vector: " + str(len(featureVector)))
         featureVectors.append(featureVector)
     else:
@@ -193,7 +193,9 @@ print("Exporting to CSV")
 
 columnLabels = ['userID','avgHoldTime','avgSeekTime','averageNgramTime']
 columnLabels.extend(desiredNgrams)
-dataUtils.generateFeatureCsv(featureVectors,"jonstest2",columnLabels)
+if (KEEP_LABELS):
+    columnLabels.append('label')
+dataUtils.generateFeatureCsv(featureVectors,"feature_vectors_labeled_ctrafton",columnLabels)
 
 
 #data = arff.load(open('data_-15_16-19_256.arff'), 'rb')
