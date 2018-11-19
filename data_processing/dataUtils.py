@@ -1,5 +1,7 @@
 import pandas as pd
+import numpy as np
 import seaborn as sb
+from scipy import stats
 import matplotlib.pyplot as plt
 import matplotlib.markers as markers
 import os
@@ -96,23 +98,19 @@ def readAgeDataSet(keepLabel):
 # X : the results of the kMeans clustering
 # result:
 # numberOfClusters: the number of clustered generated from KMeans
-# useDataLabel: boolean to describe whether or not the original label on the data point is being used.
+# labels = labels for this data. is defaulted to empty and only used when it is not empty to color data points
 # this label indicates what age group it belonged to originally and can alll=ow for accuracy spotchecks
-def plotClusteredResults(X, result, numberOfClusters, useDataLabels):
+def plotClusteredResults(X, result, numberOfClusters, labels=[]):
     colors = ['lightgreen', 'orange', 'blue', 'yellow', 'orange']
     markers = ['s', 'p', '^', 'o', '*']
+    if len(labels) > 0:
+        color = colors[1] #TODO this color will have to come from the the label, perhaps iterate through all datapoints
     for cluster in range(1, numberOfClusters):
         plt.scatter(X[result == cluster-1, 1],
                     X[result == cluster-1, 2],
-                    s=50, c=colors[cluster],
-                    marker='s', edgecolor='black',
+                    s=50, c=color,
+                    marker=markers[cluster], edgecolor='black',
                     label='cluster ' + str(cluster))
-    # if useDataLabels:
-    #     labels_list = list(dataSetLabels.values())
-    #     for point in enumerate(X):
-    #         print(point)
-    #         mark = markers[point[len(point) - 1]]
-    #         print(mark)
     return plt
 
 
