@@ -1,6 +1,7 @@
 import scipy
 from sklearn.cluster import KMeans
 from sklearn.metrics import f1_score
+from sklearn import metrics
 from sklearn import preprocessing
 import data_processing.dataUtils as dataUtils
 import pandas as pd
@@ -115,9 +116,9 @@ X2 = df_norm_labeled
 
 # Parameter:
 # init: k-means++ -
-result_labeled = kmeans.fit_predict(X2)
+result_labeled = kmeans.fit(X2)
+outputtedLabels = result_labeled.labels_
 #TODO get the labels
 print(df_labeled_labels.values)
-# Calculate the F Score for this run
-fScore = f1_score(df_labeled_labels, result_labeled, average='micro')
+fScore = f1_score(df_labeled_labels, outputtedLabels, average='micro')
 print("F-Score is: " + str(fScore))
