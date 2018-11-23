@@ -55,7 +55,7 @@ normalizedLabeledData = normalizedLabeledData.astype(float)
 # Remove outliers based on the avgSeekTime TODO put this code into its own experiment
 feature = 'avgSeekTime'
 z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
-outliers_removed = removeOutliersByZScore(z_scored, feature)
+outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
 
 #run experiment with this dataset
 kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=500, tol=1e-04, random_state=1)
