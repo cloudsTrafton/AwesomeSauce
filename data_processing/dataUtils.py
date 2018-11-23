@@ -113,6 +113,37 @@ def plotClusteredResults(X, result, numberOfClusters, labels=[]):
                     label='cluster ' + str(cluster))
     return plt
 
+#Adds a Z-Score column for the specified column.
+# Takes in the dataset as a DataFrame and computes the Z-Score for the given feature and appends
+# a column to the given dataFrame of the Z-Score for each row.
+def getColumnZScores(df, feature):
+    cols = list(df.columns)
+    df[cols]
+    # now iterate over the remaining columns and create a new zscore column
+    for col in cols:
+        if str(col) == feature:
+            col_zscore = col + '_zscore'
+            df[col_zscore] = (df[col] - df[col].mean()) / df[col].std(ddof=0)
+    return df
+
+
+# Removes the outliers for a particular dataset based on the feature given.
+# The feature parameter should match what it is in the dataset.
+# returns the dataSet as a DataFrame with the outliers removed.
+# Also drops the z_Score column added so that it can be used for clustering.
+def removeOutliersByZScore(normalizedDataFrame, feature):
+    z_scored = getColumnZScores(pd.DataFrame(normalizedDataFrame), feature)
+    feature_column = feature + '_zscore';
+    outlier_count = 0
+    for index, row in pd.DataFrame(z_scored).iterrows():
+        if abs(row[feature_column]) > 3:
+            outlier_count+=1
+            z_scored.drop(index, inplace=True)
+    z_scored.drop(columns=[str(feature_column)])
+    print("Outliers found: " + str(outlier_count))
+    return z_scored
+
+
 
 
 
