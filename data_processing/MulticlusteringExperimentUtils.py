@@ -3,6 +3,18 @@
 import time
 from sklearn.metrics import f1_score
 
+
+#Normalizes all data except the label column, since we want to leave that intact.
+def normalizeLabeledData(data):
+    result = data.copy()
+    for feature in data.columns:
+        if(feature != 'label' and feature != 'userId'):
+            max_value = data[feature].max()
+            min_value = data[feature].min()
+            result[feature] = (data[feature] - min_value) / (max_value - min_value)
+    return result
+
+
 # Prints the experiment data as well as calculates the F-Scores and prints them to the file
 #
 # Parameters:
