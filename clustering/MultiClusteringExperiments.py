@@ -64,7 +64,12 @@ result_outliers_removed = kmeans.fit_predict(outliers_removed)
 cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
     expUtils.getClusterBucketsForMultiClustering(feature_set, result)
 
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6, "jonstest7_2_outliers_removed")
+expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+                          "jonstest7_2_outliers_removed", result_outliers_removed)
+
+def runMultiClusteringExperiment(outputFileName):
+    return 0
+
 
 
 
