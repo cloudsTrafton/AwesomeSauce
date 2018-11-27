@@ -1,0 +1,276 @@
+
+Results for Cluster 1
+Number of features in this cluster: 543.0
+Percent and amount of each label in cluster Cluster 1
+15 below: 
+percent_15_below: 0.007366482504604052
+num_15_below: 4.0
+16-19: 
+percent_16_19: 0.001841620626151013
+num_16_19: 1.0
+20-29: 
+percent20_29: 0.058931860036832415
+num20_29: 32.0
+30-39: 
+percent30_39: 0.1731123388581952
+num30_39: 94.0
+40-49: 
+percent40_49: 0.4438305709023941
+num40_49: 241.0
+50+: 
+percent50_plus: 0.3149171270718232
+num50_plus: 171.0
+Highest percentage in this cluster: 0.4438305709023941
+
+Results for Cluster 2
+Number of features in this cluster: 537.0
+Percent and amount of each label in cluster Cluster 2
+15 below: 
+percent_15_below: 0.6014897579143389
+num_15_below: 323.0
+16-19: 
+percent_16_19: 0.3985102420856611
+num_16_19: 214.0
+20-29: 
+percent20_29: 0.0
+num20_29: 0.0
+30-39: 
+percent30_39: 0.0
+num30_39: 0.0
+40-49: 
+percent40_49: 0.0
+num40_49: 0.0
+50+: 
+percent50_plus: 0.0
+num50_plus: 0.0
+Highest percentage in this cluster: 0.6014897579143389
+
+Results for Cluster 3
+Number of features in this cluster: 1022.0
+Percent and amount of each label in cluster Cluster 3
+15 below: 
+percent_15_below: 0.0
+num_15_below: 0.0
+16-19: 
+percent_16_19: 0.0
+num_16_19: 0.0
+20-29: 
+percent20_29: 0.004892367906066536
+num20_29: 5.0
+30-39: 
+percent30_39: 0.06555772994129158
+num30_39: 67.0
+40-49: 
+percent40_49: 0.7876712328767124
+num40_49: 805.0
+50+: 
+percent50_plus: 0.14187866927592954
+num50_plus: 145.0
+Highest percentage in this cluster: 0.7876712328767124
+
+Results for Cluster 4
+Number of features in this cluster: 153.0
+Percent and amount of each label in cluster Cluster 4
+15 below: 
+percent_15_below: 0.16339869281045752
+num_15_below: 25.0
+16-19: 
+percent_16_19: 0.28104575163398693
+num_16_19: 43.0
+20-29: 
+percent20_29: 0.23529411764705882
+num20_29: 36.0
+30-39: 
+percent30_39: 0.17647058823529413
+num30_39: 27.0
+40-49: 
+percent40_49: 0.11764705882352941
+num40_49: 18.0
+50+: 
+percent50_plus: 0.026143790849673203
+num50_plus: 4.0
+Highest percentage in this cluster: 0.28104575163398693
+
+Results for Cluster 5
+Number of features in this cluster: 1362.0
+Percent and amount of each label in cluster Cluster 5
+15 below: 
+percent_15_below: 0.0
+num_15_below: 0.0
+16-19: 
+percent_16_19: 0.0
+num_16_19: 0.0
+20-29: 
+percent20_29: 0.19676945668135096
+num20_29: 268.0
+30-39: 
+percent30_39: 0.8032305433186491
+num30_39: 1094.0
+40-49: 
+percent40_49: 0.0
+num40_49: 0.0
+50+: 
+percent50_plus: 0.0
+num50_plus: 0.0
+Highest percentage in this cluster: 0.8032305433186491
+
+Results for Cluster 6
+Number of features in this cluster: 0.0
+Percent and amount of each label in cluster Cluster 6
+15 below: 
+percent_15_below: 0.0
+num_15_below: 0.0
+16-19: 
+percent_16_19: 0.0
+num_16_19: 0.0
+20-29: 
+percent20_29: 0.0
+num20_29: 0.0
+30-39: 
+percent30_39: 0.0
+num30_39: 0.0
+40-49: 
+percent40_49: 0.0
+num40_49: 0.0
+50+: 
+percent50_plus: 0.0
+num50_plus: 0.0
+Highest percentage in this cluster: 0.0
+
+Results for Cluster 1
+Number of features in this cluster: 543.0
+Percent and amount of each label in cluster Cluster 1
+15 below: 
+percent_15_below: 0.007366482504604052
+num_15_below: 4.0
+16-19: 
+percent_16_19: 0.001841620626151013
+num_16_19: 1.0
+20-29: 
+percent20_29: 0.058931860036832415
+num20_29: 32.0
+30-39: 
+percent30_39: 0.1731123388581952
+num30_39: 94.0
+40-49: 
+percent40_49: 0.4438305709023941
+num40_49: 241.0
+50+: 
+percent50_plus: 0.3149171270718232
+num50_plus: 171.0
+Highest percentage in this cluster: 0.4438305709023941
+
+Results for Cluster 2
+Number of features in this cluster: 537.0
+Percent and amount of each label in cluster Cluster 2
+15 below: 
+percent_15_below: 0.6014897579143389
+num_15_below: 323.0
+16-19: 
+percent_16_19: 0.3985102420856611
+num_16_19: 214.0
+20-29: 
+percent20_29: 0.0
+num20_29: 0.0
+30-39: 
+percent30_39: 0.0
+num30_39: 0.0
+40-49: 
+percent40_49: 0.0
+num40_49: 0.0
+50+: 
+percent50_plus: 0.0
+num50_plus: 0.0
+Highest percentage in this cluster: 0.6014897579143389
+
+Results for Cluster 3
+Number of features in this cluster: 1022.0
+Percent and amount of each label in cluster Cluster 3
+15 below: 
+percent_15_below: 0.0
+num_15_below: 0.0
+16-19: 
+percent_16_19: 0.0
+num_16_19: 0.0
+20-29: 
+percent20_29: 0.004892367906066536
+num20_29: 5.0
+30-39: 
+percent30_39: 0.06555772994129158
+num30_39: 67.0
+40-49: 
+percent40_49: 0.7876712328767124
+num40_49: 805.0
+50+: 
+percent50_plus: 0.14187866927592954
+num50_plus: 145.0
+Highest percentage in this cluster: 0.7876712328767124
+
+Results for Cluster 4
+Number of features in this cluster: 153.0
+Percent and amount of each label in cluster Cluster 4
+15 below: 
+percent_15_below: 0.16339869281045752
+num_15_below: 25.0
+16-19: 
+percent_16_19: 0.28104575163398693
+num_16_19: 43.0
+20-29: 
+percent20_29: 0.23529411764705882
+num20_29: 36.0
+30-39: 
+percent30_39: 0.17647058823529413
+num30_39: 27.0
+40-49: 
+percent40_49: 0.11764705882352941
+num40_49: 18.0
+50+: 
+percent50_plus: 0.026143790849673203
+num50_plus: 4.0
+Highest percentage in this cluster: 0.28104575163398693
+
+Results for Cluster 5
+Number of features in this cluster: 1362.0
+Percent and amount of each label in cluster Cluster 5
+15 below: 
+percent_15_below: 0.0
+num_15_below: 0.0
+16-19: 
+percent_16_19: 0.0
+num_16_19: 0.0
+20-29: 
+percent20_29: 0.19676945668135096
+num20_29: 268.0
+30-39: 
+percent30_39: 0.8032305433186491
+num30_39: 1094.0
+40-49: 
+percent40_49: 0.0
+num40_49: 0.0
+50+: 
+percent50_plus: 0.0
+num50_plus: 0.0
+Highest percentage in this cluster: 0.8032305433186491
+
+Results for Cluster 6
+Number of features in this cluster: 0.0
+Percent and amount of each label in cluster Cluster 6
+15 below: 
+percent_15_below: 0.0
+num_15_below: 0.0
+16-19: 
+percent_16_19: 0.0
+num_16_19: 0.0
+20-29: 
+percent20_29: 0.0
+num20_29: 0.0
+30-39: 
+percent30_39: 0.0
+num30_39: 0.0
+40-49: 
+percent40_49: 0.0
+num40_49: 0.0
+50+: 
+percent50_plus: 0.0
+num50_plus: 0.0
+Highest percentage in this cluster: 0.0
