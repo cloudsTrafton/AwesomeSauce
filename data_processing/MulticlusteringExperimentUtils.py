@@ -153,10 +153,18 @@ def getAveragesPerLabelForMultiClustering(clusterValues, clusterNumber, outputFi
         file.write("\n")
 
 
-def getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6, outputFileName):
+def getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6, outputFileName, results):
     getAveragesPerLabelForMultiClustering(cluster1, "Cluster 1", outputFileName)
     getAveragesPerLabelForMultiClustering(cluster2, "Cluster 2", outputFileName)
     getAveragesPerLabelForMultiClustering(cluster3, "Cluster 3", outputFileName)
     getAveragesPerLabelForMultiClustering(cluster4, "Cluster 4", outputFileName)
     getAveragesPerLabelForMultiClustering(cluster5, "Cluster 5", outputFileName)
     getAveragesPerLabelForMultiClustering(cluster6, "Cluster 6", outputFileName)
+
+    #save the clustering results for this experiment
+    fileName = "../experiments/experiment_" + outputFileName + "_" + "clusters.out"
+    with open(fileName, "w") as file:
+        for cluster in results:
+            file.write(str(cluster) + '\n')
+
+
