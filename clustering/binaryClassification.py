@@ -135,5 +135,5 @@ plt = dataUtils.plotClusteredResults(X2, result_labeled, 5, df_labeled_labels)
 
 #TODO get the right labels for data that has been reduced
 print(df_labeled_labels.values)
-# fScore = f1_score(df_labeled_labels, outputtedLabels, average='micro')
-# print("F-Score is: " + str(fScore))
+fScore = f1_score(df_labeled_labels, outputtedLabels, average='micro')
+print("F-Score is: " + str(fScore))

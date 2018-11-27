@@ -83,7 +83,7 @@ for file in fileList:
 
     # special ngrams are those mentioned as having the highest age-based correlation
     # using supervised learning. We want to capture those in our feature vector here.
-    specialNgramVector = len(desiredNgrams) * [0]
+    specialNgramVector = len(desiredNgrams) * [None]
 
     ngramVector = {}                            # Dictionary containing all these ngram features
     ngramName = ngram * [0]                     # The column of this feature will be
@@ -92,15 +92,15 @@ for file in fileList:
                                                # we'll convert these in a sparse matrix
     ngramDuration = ngram * [0]                 # store a "sliding window" of durations as we go
     for line in file:
-        print("Line")
-        print(line)
+        if debugging: print("Line")
+        if debugging: print(line)
         if KEEP_LABELS:
             label = line[len(line)-1] #Since the label will always be the last parameter, we generalize it and add it.
 
         n = n % ngram                           # need to keep #ngram counters running
         row = line.strip().split(',')
         if debugging: print(hex(int(row[0])), row)
-        print(row)
+        if debugging: print(row)
         if(len(row[0]) == 0 or len(row[1]) == 0 or len(row[2]) == 0): continue
 
         keyCode = int(row[0])                   # keycode (ASCII)
@@ -142,19 +142,19 @@ for file in fileList:
     else:
         averageNgramTime = 0
 
-    #discard outliers
+    #discard outliers and datapoints with missing features  and all(x != 0 for x in specialNgramVector)
     if(averageHoldTime < discardHoldTime and averageSeekTime < discardSeekTime and averageNgramTime > 0):
 
         # Note: this just fills in the average ngram time of all ngrams if one is missing,
         # may consider just discarding this user's data instead.
-        newSpecialNgramVector = []
-        for sp in specialNgramVector:
-            if sp == 0:
-                newSpecialNgramVector.append(int(averageNgramTime))
-            else:
-                newSpecialNgramVector.append(sp)
+        #newSpecialNgramVector = []
+        #for sp in specialNgramVector:
+        #    if sp == 0:
+        #        newSpecialNgramVector.append(int(averageNgramTime))
+        #    else:
+        #        newSpecialNgramVector.append(sp)
 
-        specialNgramVector = newSpecialNgramVector
+        #specialNgramVector = newSpecialNgramVector
 
         print('User Data:', userCount)
         print('Found ngrams for user: ', ngramVector)
@@ -195,7 +195,7 @@ columnLabels = ['userID','avgHoldTime','avgSeekTime','averageNgramTime']
 columnLabels.extend(desiredNgrams)
 if (KEEP_LABELS):
     columnLabels.append('label')
-dataUtils.generateFeatureCsv(featureVectors,"feature_vectors_labeled_ctrafton",columnLabels)
+dataUtils.generateFeatureCsv(featureVectors,"jonstest6",columnLabels)
 
 
 #data = arff.load(open('data_-15_16-19_256.arff'), 'rb')
