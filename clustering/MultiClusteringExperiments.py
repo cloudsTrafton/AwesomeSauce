@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans
 from sklearn import preprocessing
 from scipy import stats
 import pandas as pd
+from clustering import silhouette
 import data_processing.MulticlusteringExperimentUtils as expUtils
 import numpy as np
 
@@ -34,97 +35,97 @@ feature_set_copy = feature_set_copy.astype(float)
 # # Cluster for K-Means
 kmeans = KMeans(init='k-means++', n_clusters=7, n_init=120, max_iter=500, tol=1e-04, random_state=1)
 result = kmeans.fit_predict(feature_set_copy)
-
-
-# --- EXPERIMENT 2 --- #
-# Removing outliers based on Z-Score, using jonstest7 data set.
-
+#
+#
+# # --- EXPERIMENT 2 --- #
+# # Removing outliers based on Z-Score, using jonstest7 data set.
+#
 feature_set_copy1 = feature_set
 feature_set_copy1 = feature_set_copy1.drop(columns=['userID']).drop(columns=['num'])
 
 normalizedLabeledData = expUtils.normalizeLabeledData(pd.DataFrame(feature_set_copy1))
 normalizedLabeledData = normalizedLabeledData.astype(float)
-
-
-
-# average hold time
-feature = 'avgSeekTime'
-z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
-outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
-
-#run experiment with this dataset
-kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
-result_outliers_removed = kmeans.fit_predict(z_scored)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
-
-#---------------------------------------------------------------------------
-# average hold time
-feature = 'avgHoldTime'
-z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
-outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
-
-#run experiment with this dataset
-kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
-result_outliers_removed = kmeans.fit_predict(z_scored)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
-
-#---------------------------------------------------------------------------
-# average hold time
-feature = 'avgHoldTime'
-z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
-outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
-
-#run experiment with this dataset
-kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
-result_outliers_removed = kmeans.fit_predict(z_scored)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
-
-#---------------------------------------------------------------------------
-# average hold time
-feature = 'averageNgramTime'
-z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
-outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
-
-#run experiment with this dataset
-kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
-result_outliers_removed = kmeans.fit_predict(z_scored)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
-
-#---------------------------------------------------------------------------
-# average hold time
-feature = 'LA'
-z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
-outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
-
-#run experiment with this dataset
-kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
-result_outliers_removed = kmeans.fit_predict(z_scored)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
+#
+#
+#
+# # average hold time
+# feature = 'avgSeekTime'
+# z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
+# outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
+#
+# #run experiment with this dataset
+# kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
+# result_outliers_removed = kmeans.fit_predict(z_scored)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
+#
+# #---------------------------------------------------------------------------
+# # average hold time
+# feature = 'avgHoldTime'
+# z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
+# outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
+#
+# #run experiment with this dataset
+# kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
+# result_outliers_removed = kmeans.fit_predict(z_scored)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
+#
+# #---------------------------------------------------------------------------
+# # average hold time
+# feature = 'avgHoldTime'
+# z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
+# outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
+#
+# #run experiment with this dataset
+# kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
+# result_outliers_removed = kmeans.fit_predict(z_scored)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
+#
+# #---------------------------------------------------------------------------
+# # average hold time
+# feature = 'averageNgramTime'
+# z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
+# outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
+#
+# #run experiment with this dataset
+# kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
+# result_outliers_removed = kmeans.fit_predict(z_scored)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
+#
+# #---------------------------------------------------------------------------
+# # average hold time
+# feature = 'LA'
+# z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
+# outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
+#
+# #run experiment with this dataset
+# kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)
+# result_outliers_removed = kmeans.fit_predict(z_scored)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_outliers_removed)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           "jonstest7_2_outliers_removed_2" + feature, result_outliers_removed)
 
 # --- Remove all of the outliers for the big features ----
 # average hold time
@@ -141,21 +142,24 @@ print(len(z_scored_outliers_removed))
 
 result_removed_outliers = kmeans.fit_predict(z_scored_outliers_removed)
 
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_removed_outliers)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          "jonstest7_2_outliers_removed_large_features", z_scored_outliers_removed)
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_removed_outliers)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           "jonstest7_2_outliers_removed_large_features", z_scored_outliers_removed)
 
 kmeans_2_clusters = KMeans(init='k-means++', n_clusters=3, n_init=120, max_iter=800, tol=1e-04, random_state=1)
 result_removed_outliers_2_clusters = kmeans_2_clusters.fit_predict(z_scored_outliers_removed)
 
+kmeans_init_random = KMeans(init='k-means++', n_clusters=4, n_init=120, max_iter=900, tol=1e-04, random_state=1)
+result_init_random = kmeans_init_random.fit_predict(z_scored_outliers_removed)
+
 
 cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_removed_outliers_2_clusters)
+    expUtils.getClusterBucketsForMultiClustering(feature_set, result_init_random)
 
 expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          "jonstest7_2_outliers_removed_large_features_2_clusters", z_scored_outliers_removed)
+                          "jonstest7_2_outliers_removed_large_features_k++_4", z_scored_outliers_removed)
 
 
 

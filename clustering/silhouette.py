@@ -54,7 +54,7 @@ pd.set_option('display.width', 1000)
 # Multi-clustering with labeled feature vectors
 
 # Retrieve the processed data set
-feature_set = dataUtils.retreiveDataSet("./feature_sets/jonstest7.csv")
+feature_set = dataUtils.retreiveDataSet("../feature_sets/jonstest7.csv")
 
 #Drop the label and ID column, since we dont want to include these in the clustering algorithm.
 feature_set_copy = feature_set
