@@ -70,5 +70,5 @@ feature_set_copy = min_max_scaler.fit_transform(feature_set_copy.values)
 # Cluster for K-Means
 kmeans = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=500, tol=1e-04, random_state=1)
 result = kmeans.fit_predict(feature_set_copy)
-
-makeSilhouettePlot(feature_set_copy, result)
+for res in result:
+    print(res)

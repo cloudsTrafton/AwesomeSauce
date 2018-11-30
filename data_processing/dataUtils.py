@@ -144,6 +144,40 @@ def removeOutliersByZScore(normalizedDataFrame, feature, threshold):
     print("Outliers found: " + str(outlier_count))
     return z_scored
 
+# Takes in the result and the dataset and appends the results
+# to a "cluster" column at the end of dataset. This allows for
+# effective plotting of data and comparison of label and cluster
+# Takes in the feature set as a Pandas DataFrame and uses the raw
+# values.
+#TODO test and verify
+def addClusterColToDataSet(feature_set, result):
+    feature_set_df = pd.DataFrame(feature_set).values
+    result_df = pd.DataFrame(result, columns=['cluster'])
+    feature_set_df = pd.DataFrame(feature_set_df).join(result_df)
+    return feature_set_df
+
+# Create a scatter plot of the assigned age label and the
+# cluster that was assigned.
+#TODO test and verify, try plotting it and set the
+def plotAgeVsCluster(feature_set_clustered, numberOfClusters):
+    #Indicates cluster
+    colors = ['lightgreen', 'orange', 'blue', 'yellow', 'orange', 'purple']
+    #Indicates label
+    markers = ['s','p','^','o','*', 't']
+    labels = pd.DataFrame(feature_set_clustered).get(['label'])
+    labelArr = np.array(labels)
+    clusters = pd.DataFrame(feature_set_clustered).get(['cluster'])
+    clusterArr = np.array(clusters)
+
+    fig = plt.subplots(figsize=(11, 8))
+    for label in labelArr:
+        for cluster in clusterArr:
+            plt.scatter(labels,
+                        clusters,
+                        s=50, c=colors[cluster],
+                        marker=markers[label], edgecolor='black')
+    plt.show()
+
 
 
 

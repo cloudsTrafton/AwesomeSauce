@@ -50,17 +50,17 @@ def getClusterBucketsForMultiClustering(feature_set, result):
     # of the data points, and is an array of the cluster that the datapoint in the same position
     # in the features, we can leverage this to fill the buckets.
     for i in range(0, len(result)):
-        if result[i] == 1:
+        if result[i] == 0:
             cluster1.append(feature_set_vals[i])
-        elif result[i] == 2:
+        elif result[i] == 1:
             cluster2.append(feature_set_vals[i])
-        elif result[i] == 3:
+        elif result[i] == 2:
             cluster3.append(feature_set_vals[i])
-        elif result[i] == 4:
+        elif result[i] == 3:
             cluster4.append(feature_set_vals[i])
-        elif result[i] == 5:
+        elif result[i] == 4:
             cluster5.append(feature_set_vals[i])
-        elif result[i] == 6:
+        elif result[i] == 5:
             cluster6.append(feature_set_vals[i])
 
     return cluster1, cluster2, cluster3, cluster4, cluster5, cluster6
