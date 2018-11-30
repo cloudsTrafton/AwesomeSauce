@@ -28,171 +28,180 @@ z_scored_outliers_removed = removeOutliersByZScore(z_scored_outliers_removed, fe
 print(len(z_scored_outliers_removed))
 
 
-def runExperiment(experiment_name, kmeans):
-    result_kmeans_baseline = kmeans.fit_predict(z_scored_outliers_removed)
+def runExperiment(expName, kmeans):
+    kmeans_res = kmeans.fit_predict(z_scored_outliers_removed)
 
     cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-        expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_baseline)
+        expUtils.getClusterBucketsForMultiClustering(feature_set, kmeans_res)
 
-    sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_baseline, experiment_name)
+    sil.makeSilhouettePlot(z_scored_outliers_removed, kmeans_res, expName)
 
     expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                              experiment_name, z_scored_outliers_removed)
+                              expName, z_scored_outliers_removed)
 
 
 
 # #-- Run experiments and then generate the silhouettes ----
 #
-# # Base K-Means Run
-experiment_name = "jonstest7_Kmeans_baseline_outliers_removed"
-
-result_kmeans_baseline = kMeans_baseline.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_baseline)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_baseline, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
+# # # Base K-Means Run
+# experiment_name = "jonstest7_Kmeans_baseline_outliers_removed"
+#
+# result_kmeans_baseline = kMeans_baseline.fit_predict(z_scored_outliers_removed)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_baseline)
+#
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_baseline, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
+# #
+# # #---------------------------------------------------------------------------------------
+# #
+# # # K-Means with high number of iterations
+# #
+# experiment_name =  "jonstest7_Kmeans_high_iters_outliers_removed"
+#
+# result_kmeans_high_iters = kMeans_baseline_high_iteration.fit_predict(z_scored_outliers_removed)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_high_iters)
+#
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_high_iters, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
+# #
+# # #---------------------------------------------------------------------------------------
+# #
+# # # K-Means with random initialization
+# #
+# experiment_name = "jonstest7_Kmeans_random_init_outliers_removed"
+#
+# result_kmeans_random_init = kMeans_baseline_random_init.fit_predict(z_scored_outliers_removed)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_random_init)
+#
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_random_init, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
+# #
+# # #---------------------------------------------------------------------------------------
+# #
+# # # K-Means with random initialization - again
+# #
+# experiment_name = "jonstest7_Kmeans_random_init_outliers_removed_2"
+#
+# result_kmeans_random_init = kMeans_baseline_random_init.fit_predict(z_scored_outliers_removed)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_random_init)
+#
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_random_init, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
+# #
+# #
+# # #---------------------------------------------------------------------------------------
+# #
+# # # K-Means with the same as the baseline but with 4 clusters
+# #
+# experiment_name = "jonstest7_Kmeans_baseline_4_clusters_outliers_removed"
+#
+# result_kmeans_4_clusters = kMeans_baseline_4_clusters.fit_predict(z_scored_outliers_removed)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_4_clusters)
+#
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_4_clusters, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
+# #
+# #
+# # #---------------------------------------------------------------------------------------
+# #
+# # # K-Means with the same as the baseline but with 3 clusters
+# #
+# experiment_name = "jonstest7_Kmeans_baseline_3_clusters_outliers_removed"
+#
+# result_kmeans_3_clusters = kMeans_baseline_3_clusters.fit_predict(z_scored_outliers_removed)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_3_clusters)
+#
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_3_clusters, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
 #
 # #---------------------------------------------------------------------------------------
 #
-# # K-Means with high number of iterations
+# # K-Means with the same as the baseline but with 2 clusters - hoping for younger and older
 #
-experiment_name =  "jonstest7_Kmeans_high_iters_outliers_removed"
-
-result_kmeans_high_iters = kMeans_baseline_high_iteration.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_high_iters)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_high_iters, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
+# experiment_name = "jonstest7_Kmeans_baseline_2_clusters_outliers_removed"
+#
+# result_kmeans_2_clusters = kMeans_baseline_2_clusters.fit_predict(z_scored_outliers_removed)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_2_clusters)
+#
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_2_clusters, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
+# #---------------------------------------------------------------------------------------
+#
+# # K-Means with the same as the baseline but with 2 clusters - hoping for younger and older with low iters
+#
+# experiment_name = "jonstest7_Kmeans_baseline_2_clusters_outliers_removed_low_iters"
+#
+# result_kmeans_2_clusters_low_iter = kMeans_baseline_2_clusters_low_iter.fit_predict(z_scored_outliers_removed)
+#
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_2_clusters_low_iter)
+#
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_2_clusters_low_iter, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
 #
 # #---------------------------------------------------------------------------------------
 #
-# # K-Means with random initialization
+# # K-Means with the same as the baseline but with 2 clusters - hoping for younger and older with low iters
 #
-experiment_name = "jonstest7_Kmeans_random_init_outliers_removed"
-
-result_kmeans_random_init = kMeans_baseline_random_init.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_random_init)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_random_init, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
+# experiment_name = "jonstest7_Kmeans_baseline_2_clusters_outliers_removed_high_iters"
 #
-# #---------------------------------------------------------------------------------------
+# result_kmeans_2_clusters_high_iter = kMeans_baseline_2_clusters_high_iter.fit_predict(z_scored_outliers_removed)
 #
-# # K-Means with random initialization - again
+# cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
+#     expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_2_clusters_high_iter)
 #
-experiment_name = "jonstest7_Kmeans_random_init_outliers_removed_2"
-
-result_kmeans_random_init = kMeans_baseline_random_init.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_random_init)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_random_init, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
+# sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_2_clusters_high_iter, experiment_name)
+#
+# expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
+#                           experiment_name, z_scored_outliers_removed)
 #
 #
-# #---------------------------------------------------------------------------------------
-#
-# # K-Means with the same as the baseline but with 4 clusters
-#
-experiment_name = "jonstest7_Kmeans_baseline_4_clusters_outliers_removed"
-
-result_kmeans_4_clusters = kMeans_baseline_4_clusters.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_4_clusters)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_4_clusters, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
-#
-#
-# #---------------------------------------------------------------------------------------
-#
-# # K-Means with the same as the baseline but with 3 clusters
-#
-experiment_name = "jonstest7_Kmeans_baseline_3_clusters_outliers_removed"
-
-result_kmeans_3_clusters = kMeans_baseline_3_clusters.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_3_clusters)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_3_clusters, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
-
-#---------------------------------------------------------------------------------------
-
-# K-Means with the same as the baseline but with 2 clusters - hoping for younger and older
-
-experiment_name = "jonstest7_Kmeans_baseline_2_clusters_outliers_removed"
-
-result_kmeans_2_clusters = kMeans_baseline_2_clusters.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_2_clusters)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_2_clusters, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
-#---------------------------------------------------------------------------------------
-
-# K-Means with the same as the baseline but with 2 clusters - hoping for younger and older with low iters
-
-experiment_name = "jonstest7_Kmeans_baseline_2_clusters_outliers_removed_low_iters"
-
-result_kmeans_2_clusters_low_iter = kMeans_baseline_2_clusters_low_iter.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_2_clusters_low_iter)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_2_clusters_low_iter, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
-
-#---------------------------------------------------------------------------------------
-
-# K-Means with the same as the baseline but with 2 clusters - hoping for younger and older with low iters
-
-experiment_name = "jonstest7_Kmeans_baseline_2_clusters_outliers_removed_high_iters"
-
-result_kmeans_2_clusters_high_iter = kMeans_baseline_2_clusters_high_iter.fit_predict(z_scored_outliers_removed)
-
-cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-    expUtils.getClusterBucketsForMultiClustering(feature_set, result_kmeans_2_clusters_high_iter)
-
-sil.makeSilhouettePlot(z_scored_outliers_removed, result_kmeans_2_clusters_high_iter, experiment_name)
-
-expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                          experiment_name, z_scored_outliers_removed)
+# # Run experiment with the average removed - just the N-Grams
+# normalizedData_noAvgs = pd.DataFrame(normalizedLabeledData).drop()
 
 
 #automated runs with function - WILL RUN
 runExperiment("jonstest7_Kmeans_baseline_outliers_removed_2", kMeans_baseline)
-# runExperiment("jonstest7_Kmeans_baseline_outliers_removed_2", kMeans_baseline)
-# runExperiment("jonstest7_Kmeans_baseline_outliers_removed_2", kMeans_baseline)
-# runExperiment("jonstest7_Kmeans_baseline_outliers_removed_2", kMeans_baseline)
-# runExperiment("jonstest7_Kmeans_baseline_outliers_removed_2", kMeans_baseline)
-# runExperiment("jonstest7_Kmeans_baseline_outliers_removed_2", kMeans_baseline)
+runExperiment("jonstest7_Kmeans_high_iters_outliers_removed_2", kMeans_baseline_high_iteration)
+runExperiment("jonstest7_Kmeans_baseline_4_clusters_outliers_removed_2", kMeans_baseline_4_clusters)
+runExperiment("jonstest7_Kmeans_baseline_3_clusters_outliers_removed_2", kMeans_baseline_3_clusters)
+runExperiment("jonstest7_Kmeans_baseline_2_clusters_outliers_removed_2", kMeans_baseline_2_clusters)
+
+
+
+
+
+
 
 
 

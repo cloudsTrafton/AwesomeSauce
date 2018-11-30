@@ -37,12 +37,12 @@ def makeSilhouettePlot(featureSet, kmeansOutput, experimentName = ''):
                 linestyle="--")
     plt.yticks(yticks, cluster_labels + 1)
     plt.ylabel('Cluster')
-    plt.xlabel('Silhouette Coefficient')
+    plt.xlabel('Silhouette Coefficient: ' + str(silhouette_avg))
 
     if experimentName == '':
         experimentName = datetime.now().strftime("%m_%d_%y_%H_%M_%S_%f")
 
-    plt.savefig(experimentName + ".png", dpi=600)
+    plt.savefig("../silhouettes/" + experimentName + ".png", dpi=600)
     plt.show()
     return plt
 

@@ -85,7 +85,7 @@ def getAveragesPerLabelForMultiClustering(clusterValues, clusterNumber, outputFi
     num50_plus = 0.0
 
     #Number of features that we are looking at in this cluster
-    numFeatureInCluster = len(clusterValues)
+    numDataPoints = len(clusterValues)
     for vector in clusterValues:
         label = vector[len(vector) - 1]
         if (label == 0):
@@ -101,52 +101,65 @@ def getAveragesPerLabelForMultiClustering(clusterValues, clusterNumber, outputFi
         elif (label == 5):
             num50_plus += 1
 
-    numFeatureInCluster = float(numFeatureInCluster)
-    print(numFeatureInCluster)
+    numDataPoints = float(numDataPoints)
+    print(numDataPoints)
 
-    if (numFeatureInCluster != 0.0):
-        percent_15_below = num_15_below/numFeatureInCluster
-    if(numFeatureInCluster != 0.0):
-        percent_16_19 = num_16_19/numFeatureInCluster
-    if(numFeatureInCluster != 0.0):
-        percent20_29 = num20_29/numFeatureInCluster
-    if(numFeatureInCluster != 0.0):
-        percent30_39 = num30_39/numFeatureInCluster
-    if(numFeatureInCluster != 0.0):
-        percent40_49 = num40_49/numFeatureInCluster
-    if(numFeatureInCluster != 0.0):
-        percent50_plus = num50_plus/numFeatureInCluster
+    if (numDataPoints != 0.0):
+        percent_15_below = num_15_below/numDataPoints
+    if(numDataPoints != 0.0):
+        percent_16_19 = num_16_19/numDataPoints
+    if(numDataPoints != 0.0):
+        percent20_29 = num20_29/numDataPoints
+    if(numDataPoints != 0.0):
+        percent30_39 = num30_39/numDataPoints
+    if(numDataPoints != 0.0):
+        percent40_49 = num40_49/numDataPoints
+    if(numDataPoints != 0.0):
+        percent50_plus = num50_plus/numDataPoints
+        
+        
+    # calculate the percentage of points from each group of the dataset in the cluster
+        
+    percent_15_below_ds, percent_16_19_ds, percent20_29_ds, percent30_39_ds, percent40_49_ds, percent50_plus_ds = \
+        calculatePercentOfDataPointsInCluster(num_15_below, num_16_19, num20_29, num30_39, num40_49, num50_plus)
+    
 
     fileName = "../experiments/experiment_" + outputFileName + "_" + ".out"
 
     with open(fileName, "a") as file:
         file.write("\n")
         file.write("Results for " + clusterNumber + "\n")
-        file.write("Number of features in this cluster: " + str(numFeatureInCluster) + "\n")
+        file.write("Number of data points in this cluster: " + str(numDataPoints) + "\n")
         file.write("Percent and amount of each label in cluster " + clusterNumber + "\n")
         file.write("15 below: " + "\n")
-        file.write("percent_15_below: " + str(percent_15_below) + "\n")
+        file.write("percent in cluster 15_below: " + str(percent_15_below) + "\n")
         file.write("num_15_below: " + str(num_15_below) + "\n")
+        file.write("percent of all 15_below data points in this cluster: " + str(percent_15_below_ds) + "\n")
 
         file.write("16-19: " + "\n")
-        file.write("percent_16_19: " + str(percent_16_19) + "\n")
+        file.write("percent in cluster 16_19: " + str(percent_16_19) + "\n")
         file.write("num_16_19: " + str(num_16_19) + "\n")
+        file.write("percent of all 16_19 data points in this cluster: " + str(percent_16_19_ds) + "\n")
 
         file.write("20-29: " + "\n")
-        file.write("percent20_29: " + str(percent20_29) + "\n")
+        file.write("percent in cluster 20_29: " + str(percent20_29) + "\n")
         file.write("num20_29: " + str(num20_29) + "\n")
+        file.write("percent of all 20_19 data points in this cluster: " + str(percent20_29_ds) + "\n")
 
         file.write("30-39: " + "\n")
-        file.write("percent30_39: " + str(percent30_39) + "\n")
+        file.write("percent in cluster 30_39: " + str(percent30_39) + "\n")
         file.write("num30_39: " + str(num30_39) + "\n")
+        file.write("percent of all 30_39 data points in this cluster: " + str(percent30_39_ds) + "\n")
 
         file.write("40-49: " + "\n")
-        file.write("percent40_49: " + str(percent40_49) + "\n")
+        file.write("percent in cluster 40_49: " + str(percent40_49) + "\n")
         file.write("num40_49: " + str(num40_49) + "\n")
+        file.write("percent of all 40_49 data points in this cluster: " + str(percent40_49_ds) + "\n")
 
         file.write("50+: " + "\n")
-        file.write("percent50_plus: " + str(percent50_plus) + "\n")
+        file.write("percent in cluster 50_plus: " + str(percent50_plus) + "\n")
         file.write("num50_plus: " + str(num50_plus) + "\n")
+        file.write("percent of all 50_plus data points in this cluster: " + str(percent50_plus_ds) + "\n")
 
         file.write("Highest percentage in this cluster: ")
         file.write(str(max(percent_15_below,percent_16_19,percent20_29,percent30_39,percent40_49,percent50_plus)))
@@ -166,5 +179,29 @@ def getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
     with open(fileName, "w") as file:
         for cluster in results:
             file.write(str(cluster) + '\n')
+
+
+# calculate the percent of  particular age group within the cluster.
+# Returns the percent of each type from the dataset that is present in the given cluster.
+def calculatePercentOfDataPointsInCluster(num_15_below, num_16_19, num20_29, num30_39, num40_49, num50_plus):
+
+    #These were extracted from Pentel's paper and confirmed via the DataSet
+    num_15_below_dataset = 376
+    num_16_19_dataset = 258
+    num_20_29_dataset = 357
+    num_30_39_dataset = 1327
+    num_40_49_dataset = 3213
+    num_50_plus_dataset = 1588
+
+    # use these to hold the percentages of each label per dataset
+    percent_15_below_ds = num_15_below / num_15_below_dataset
+    percent_16_19_ds = num_16_19 / num_16_19_dataset
+    percent20_29_ds = num20_29 / num_20_29_dataset
+    percent30_39_ds = num30_39 / num_30_39_dataset
+    percent40_49_ds = num40_49 / num_40_49_dataset
+    percent50_plus_ds = num50_plus / num_50_plus_dataset
+
+    return percent_15_below_ds, percent_16_19_ds, percent20_29_ds, percent30_39_ds, percent40_49_ds, percent50_plus_ds
+
 
 
