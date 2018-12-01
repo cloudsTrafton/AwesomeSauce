@@ -43,7 +43,7 @@ def makeSilhouettePlot(featureSet, kmeansOutput, experimentName = ''):
         experimentName = datetime.now().strftime("%m_%d_%y_%H_%M_%S_%f")
 
     plt.savefig("../silhouettes/" + experimentName + ".png", dpi=600)
-    plt.show()
+    # plt.show() TODO put back in
     return plt
 
 # run with test data

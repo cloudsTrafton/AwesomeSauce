@@ -140,7 +140,7 @@ def removeOutliersByZScore(normalizedDataFrame, feature, threshold):
         if abs(row[feature_column]) > threshold:
             outlier_count+=1
             z_scored.drop(index, inplace=True)
-    z_scored.drop(columns=[str(feature_column)])
+    z_scored = z_scored.drop(columns=[str(feature_column)])
     print("Outliers found: " + str(outlier_count))
     return z_scored
 

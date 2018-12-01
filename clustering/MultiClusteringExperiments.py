@@ -22,8 +22,8 @@ feature_set = dataUtils.retreiveDataSet("../feature_sets/jonstest7.csv")
 
 #Drop the label and ID column, since we dont want to include these in the clustering algorithm.
 feature_set_copy = feature_set
-feature_set_copy.drop(columns=['label'])
-feature_set_copy.drop(columns=['userID'])
+feature_set_copy = feature_set_copy.drop(columns=['label'])
+feature_set_copy = feature_set_copy.drop(columns=['userID'])
 
 
 #Normalize the data using minMax scalers
@@ -52,6 +52,8 @@ normalizedLabeledData = normalizedLabeledData.astype(float)
 feature = 'avgSeekTime'
 z_scored = getColumnZScores(pd.DataFrame(normalizedLabeledData), feature)
 outliers_removed = removeOutliersByZScore(z_scored, feature, 3)
+outliers_removed = outliers_removed.drop(columns=['label'])
+print()
 
 #run experiment with this dataset
 kmeans_2 = KMeans(init='k-means++', n_clusters=6, n_init=120, max_iter=800, tol=1e-04, random_state=1)

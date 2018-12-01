@@ -16,6 +16,9 @@ feature_set_copy1 = feature_set
 normalizedLabeledData = expUtils.normalizeLabeledData(pd.DataFrame(feature_set_copy1))
 normalizedLabeledData = normalizedLabeledData.astype(float)
 
+normalizedLabeledDataLabels = normalizedLabeledData.get(['label'])
+normalizedLabeledDataDroppedCols = normalizedLabeledData.drop(columns=['label', 'num', 'userID'])
+
 feature1 = 'avgSeekTime'
 feature2 = 'avgHoldTime'
 feature3 = 'averageNgramTime'
@@ -25,23 +28,27 @@ z_scored = getColumnZScores(pd.DataFrame(z_scored), feature3)
 z_scored_outliers_removed = removeOutliersByZScore(z_scored, feature1, 3)
 z_scored_outliers_removed = removeOutliersByZScore(z_scored_outliers_removed, feature2, 3)
 z_scored_outliers_removed = removeOutliersByZScore(z_scored_outliers_removed, feature3, 3)
+labels_z_score = z_scored_outliers_removed.get(['label'])
+z_scored_outliers_removed = z_scored_outliers_removed.drop(columns=['label', 'num', 'userID'])
 
-
-
-def runExperiment(expName, kmeans):
-    kmeans_res = kmeans.fit_predict(z_scored_outliers_removed)
+def runExperiment(expName, kmeans, labels, feature_set):
+    kmeans_res = kmeans.fit_predict(feature_set)
 
     cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
-        expUtils.getClusterBucketsForMultiClustering(feature_set, kmeans_res)
+        expUtils.getClusterBucketsForMultiClustering(labels, kmeans_res)
 
-    sil.makeSilhouettePlot(z_scored_outliers_removed, kmeans_res, expName)
+    sil.makeSilhouettePlot(feature_set, kmeans_res, expName)
 
     expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
-                              expName, z_scored_outliers_removed)
+                              expName, labels)
 
 #automated runs with function - WILL RUN
-runExperiment("jonstest7_Kmeans_baseline_outliers_removed_2", kMeans_baseline)
-runExperiment("jonstest7_Kmeans_high_iters_outliers_removed_2", kMeans_baseline_high_iteration)
-runExperiment("jonstest7_Kmeans_baseline_4_clusters_outliers_removed_2", kMeans_baseline_4_clusters)
-runExperiment("jonstest7_Kmeans_baseline_3_clusters_outliers_removed_2", kMeans_baseline_3_clusters)
-runExperiment("jonstest7_Kmeans_baseline_2_clusters_outliers_removed_2", kMeans_baseline_2_clusters)
+# runExperiment("jonstest7_Kmeans_baseline", kMeans_baseline, normalizedLabeledDataLabels, normalizedLabeledDataDroppedCols)
+# runExperiment("jonstest7_Kmeans_baseline_outliers_removed", kMeans_baseline,labels_z_score, z_scored_outliers_removed)
+# runExperiment("jonstest7_Kmeans_baseline_outliers_removed_random_init", kMeans_baseline_random_init,labels_z_score, z_scored_outliers_removed)
+# runExperiment("jonstest7_Kmeans_baseline_outliers_removed_random_init_2", kMeans_baseline_random_init,labels_z_score, z_scored_outliers_removed)
+
+runExperiment("jonstest7_Kmeans_high_iters_outliers_removed", kMeans_baseline_high_iteration, labels_z_score, z_scored_outliers_removed)
+runExperiment("jonstest7_Kmeans_baseline_4_clusters_outliers_removed", kMeans_baseline_4_clusters, labels_z_score, z_scored_outliers_removed)
+runExperiment("jonstest7_Kmeans_baseline_3_clusters_outliers_removed", kMeans_baseline_3_clusters, labels_z_score, z_scored_outliers_removed)
+runExperiment("jonstest7_Kmeans_baseline_2_clusters_outliers_removed", kMeans_baseline_2_clusters, labels_z_score, z_scored_outliers_removed)
