@@ -143,7 +143,7 @@ for file in fileList:
         averageNgramTime = 0
 
     #discard outliers and datapoints with missing features  and all(x != 0 for x in specialNgramVector)
-    if(averageHoldTime < discardHoldTime and averageSeekTime < discardSeekTime and averageNgramTime > 0):
+    if(averageHoldTime < discardHoldTime and averageSeekTime < discardSeekTime and averageNgramTime > 0 and all(x != None for x in specialNgramVector)):
 
         # Note: this just fills in the average ngram time of all ngrams if one is missing,
         # may consider just discarding this user's data instead.
@@ -195,7 +195,7 @@ columnLabels = ['userID','avgHoldTime','avgSeekTime','averageNgramTime']
 columnLabels.extend(desiredNgrams)
 if (KEEP_LABELS):
     columnLabels.append('label')
-dataUtils.generateFeatureCsv(featureVectors,"jonstest6",columnLabels)
+dataUtils.generateFeatureCsv(featureVectors,"jonstest8",columnLabels)
 
 
 #data = arff.load(open('data_-15_16-19_256.arff'), 'rb')
