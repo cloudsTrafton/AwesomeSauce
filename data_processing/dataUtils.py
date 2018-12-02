@@ -134,13 +134,13 @@ def getColumnZScores(df, feature):
 # the threshold denotes the size of the z-score that determines an outlier.
 def removeOutliersByZScore(normalizedDataFrame, feature, threshold):
     z_scored = getColumnZScores(pd.DataFrame(normalizedDataFrame), feature)
-    feature_column = feature + '_zscore';
+    feature_column = feature + '_zscore'
     outlier_count = 0
     for index, row in pd.DataFrame(z_scored).iterrows():
         if abs(row[feature_column]) > threshold:
             outlier_count+=1
             z_scored.drop(index, inplace=True)
-    z_scored = z_scored.drop(columns=[str(feature_column)])
+    z_scored.drop(columns=[feature_column], inplace=True)
     print("Outliers found: " + str(outlier_count))
     return z_scored
 
