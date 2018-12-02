@@ -35,7 +35,8 @@ def writeExperimentData(kMeansResults, initialLabels, featuresUsed, dataSetName)
     file.writelines(str(featuresUsed))
     file.writelines("F Score: " + str(fScore))
 
-
+# labels: the original labels of the datapoints
+# the resulting clusters
 def getClusterBucketsForMultiClustering(labels, result):
     # These buckets will contain the feature vectors that were put in the corresponding cluster
     cluster1 = []
@@ -90,8 +91,8 @@ def getAveragesPerLabelForMultiClustering(clusterValues, clusterNumber, outputFi
 
     #Number of features that we are looking at in this cluster
     numDataPoints = len(clusterValues)
-    for i in range(0, numDataPoints):
-        label = int(labels[i])
+    for label in clusterValues:
+        label = int(label)
         if (label == 0):
             num_15_below += 1
         elif (label == 1):
