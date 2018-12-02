@@ -194,6 +194,13 @@ def calculatePercentOfDataPointsInCluster(labels, num_15_below, num_16_19, num20
     num_40_49_dataset = 0.0
     num_50_plus_dataset = 0.0
 
+    percent_15_below_ds = 0
+    percent_16_19_ds = 0
+    percent20_29_ds = 0
+    percent30_39_ds = 0
+    percent40_49_ds = 0
+    percent50_plus_ds = 0
+
 
     for label in labels:
         label = int(label)
@@ -211,12 +218,18 @@ def calculatePercentOfDataPointsInCluster(labels, num_15_below, num_16_19, num20
             num_50_plus_dataset += 1
 
     # use these to hold the percentages of each label per dataset
-    percent_15_below_ds = num_15_below / num_15_below_dataset
-    percent_16_19_ds = num_16_19 / num_16_19_dataset
-    percent20_29_ds = num20_29 / num_20_29_dataset
-    percent30_39_ds = num30_39 / num_30_39_dataset
-    percent40_49_ds = num40_49 / num_40_49_dataset
-    percent50_plus_ds = num50_plus / num_50_plus_dataset
+    if(num_15_below_dataset != 0):
+        percent_15_below_ds = num_15_below / num_15_below_dataset
+    if(num_16_19_dataset != 0):
+        percent_16_19_ds = num_16_19 / num_16_19_dataset
+    if(num_20_29_dataset != 0):
+        percent20_29_ds = num20_29 / num_20_29_dataset
+    if(num_30_39_dataset != 0):
+        percent30_39_ds = num30_39 / num_30_39_dataset
+    if (num_40_49_dataset != 0):
+        percent40_49_ds = num40_49 / num_40_49_dataset
+    if (num_50_plus_dataset != 0):
+        percent50_plus_ds = num50_plus / num_50_plus_dataset
 
     return percent_15_below_ds, percent_16_19_ds, percent20_29_ds, percent30_39_ds, percent40_49_ds, percent50_plus_ds
 
