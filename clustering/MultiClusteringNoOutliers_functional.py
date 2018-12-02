@@ -1,3 +1,5 @@
+from sklearn.manifold import TSNE
+
 from clustering import silhouette as sil
 from data_processing import MulticlusteringExperimentUtils as expUtils
 # Keep the clustering experiments that involve outliers here
@@ -10,7 +12,7 @@ import pandas as pd
 
 # --- Remove all of the outliers for the big features ----
 # average hold time
-from data_processing.CleanDataUtils import feature_set, feature_set_complete_vectors_only
+from data_processing.CleanDataUtils import feature_set, feature_set_complete_vectors_only,feature_set_more_even_vectors
 from data_processing.dataUtils import getColumnZScores, removeOutliersByZScore
 
 
@@ -57,20 +59,45 @@ set_complete_vectors = set
 feature1 = 'avgSeekTime'
 feature2 = 'avgHoldTime'
 feature3 = 'averageNgramTime'
+#
+# set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature1)
+# set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature2)
+# set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature3)
+# set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature1, 3)
+# set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature2, 3)
+# set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature3, 3)
+# set_complete_vectors = expUtils.normalizeLabeledData(pd.DataFrame(set_complete_vectors))
+# set_complete_vectors = set_complete_vectors.astype(float)
+# set_complete_vectors_COPY = set_complete_vectors
+# set_complete_vectors_labels = pd.DataFrame(set_complete_vectors).get(['label'])
+# set_complete_vectors.drop(columns=['label', 'userID'], inplace=True)
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved", kMeans_baseline, set_complete_vectors_labels,  set_complete_vectors)
+#
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_highest_iters", kMeans_baseline_highest_iteration, set_complete_vectors_labels,  set_complete_vectors)
 
-set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature1)
-set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature2)
-set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature3)
-set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature1, 3)
-set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature2, 3)
-set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature3, 3)
-set_complete_vectors = expUtils.normalizeLabeledData(pd.DataFrame(set_complete_vectors))
-set_complete_vectors = set_complete_vectors.astype(float)
-set_complete_vectors_labels = pd.DataFrame(set_complete_vectors).get(['label'])
-set_complete_vectors.drop(columns=['label', 'userID'], inplace=True)
-runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved", kMeans_baseline, set_complete_vectors_labels,  set_complete_vectors)
 
-runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_highest_iters", kMeans_baseline_highest_iteration, set_complete_vectors_labels,  set_complete_vectors)
+even_vectors = feature_set_more_even_vectors
+even_vectors = getColumnZScores(pd.DataFrame(even_vectors), feature1)
+even_vectors = getColumnZScores(pd.DataFrame(even_vectors), feature2)
+even_vectors = getColumnZScores(pd.DataFrame(even_vectors), feature3)
+even_vectors = removeOutliersByZScore(even_vectors, feature1, 3)
+even_vectors = removeOutliersByZScore(even_vectors, feature2, 3)
+even_vectors = removeOutliersByZScore(even_vectors, feature3, 3)
+even_vectors = expUtils.normalizeLabeledData(pd.DataFrame(even_vectors))
+even_vectors = even_vectors.astype(float)
+even_vectors_labels = pd.DataFrame(even_vectors).get(['label'])
+even_vectors.drop(columns=['label', 'userID'], inplace=True)
+runExperiment("evenVectors_Kmeans_baseline_completeVectors_outliersRemoved", kMeans_baseline, even_vectors_labels,  even_vectors)
+
+
+
+# run it with T-SNE
+# tsne = TSNE(n_components=2, verbose=1)
+# tsne_result = tsne.fit_transform(set_complete_vectors_COPY.values)
+# print(len(tsne_result))
+#
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_tsne", kMeans_baseline, set_complete_vectors_labels,  tsne_result)
+
 
 # runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_highest_iters_2_clusters", kMeans_baseline_highest_iteration_2_clusters, set_complete_vectors_labels,  set_complete_vectors)
 
@@ -81,16 +108,16 @@ runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_highest
 #
 # runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_3_clusters", kMeans_baseline_3_clusters, set_complete_vectors_labels,  set_complete_vectors)
 
-avgs_only = set_complete_vectors.get(['avgSeekTime', 'avgHoldTime', 'averageNgramTime'])
-runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_avgs_only", kMeans_baseline, set_complete_vectors_labels,  avgs_only)
-
-noAvgs = set_complete_vectors.drop(columns=['avgSeekTime', 'avgHoldTime', 'averageNgramTime'])
-runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_no_avgs", kMeans_baseline, set_complete_vectors_labels,  noAvgs)
-
-
+# avgs_only = set_complete_vectors.get(['avgSeekTime', 'avgHoldTime', 'averageNgramTime'])
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_avgs_only", kMeans_baseline, set_complete_vectors_labels,  avgs_only)
+#
+# noAvgs = set_complete_vectors.drop(columns=['avgSeekTime', 'avgHoldTime', 'averageNgramTime'])
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_no_avgs", kMeans_baseline, set_complete_vectors_labels,  noAvgs)
 
 
 
+
+# -------------- TESTS WITHOUT COMPLETE VECTORS -----------------
 
 
 # feature_set_copy1 = feature_set
