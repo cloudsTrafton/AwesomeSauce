@@ -3,14 +3,14 @@ from data_processing import MulticlusteringExperimentUtils as expUtils
 # Keep the clustering experiments that involve outliers here
 from clustering.KMeansVariations import kMeans_baseline, kMeans_baseline_high_iteration, kMeans_baseline_random_init, \
     kMeans_baseline_4_clusters, kMeans_baseline_3_clusters, kMeans_baseline_2_clusters, kMeans_baseline_2_clusters_low_iter,\
-    kMeans_baseline_2_clusters_high_iter
+    kMeans_baseline_2_clusters_high_iter, kMeans_baseline_highest_iteration, kMeans_baseline_highest_iteration_2_clusters
 
-
+from clustering.tsne import makeTSNEPlot
 import pandas as pd
 
 # --- Remove all of the outliers for the big features ----
 # average hold time
-from data_processing.CleanDataUtils import feature_set
+from data_processing.CleanDataUtils import feature_set, feature_set_complete_vectors_only
 from data_processing.dataUtils import getColumnZScores, removeOutliersByZScore
 
 
@@ -21,7 +21,12 @@ def runExperiment(expName, kmeans, labels, feature_set):
     cluster1, cluster2, cluster3, cluster4, cluster5, cluster6 = \
         expUtils.getClusterBucketsForMultiClustering(labels, kmeans_res)
 
+    feature_set_labeled = pd.DataFrame(feature_set).join(labels)
+    feature_set_labeled['cluster'] = kmeans_res.copy()
+
     sil.makeSilhouettePlot(feature_set, kmeans_res, expName)
+
+    makeTSNEPlot(feature_set_labeled, experimentName=expName)
 
     expUtils.getAverageForAll(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6,
                               expName, labels)
@@ -29,23 +34,61 @@ def runExperiment(expName, kmeans, labels, feature_set):
 
 
 
-outliersRemovedNotNormalized = feature_set
+set = feature_set_complete_vectors_only
+
+# outliersRemovedNotNormalized = getColumnZScores(pd.DataFrame(outliersRemovedNotNormalized), feature1)
+# outliersRemovedNotNormalized = getColumnZScores(pd.DataFrame(outliersRemovedNotNormalized), feature2)
+# outliersRemovedNotNormalized = getColumnZScores(pd.DataFrame(outliersRemovedNotNormalized), feature3)
+#
+# outliersRemovedNotNormalized = removeOutliersByZScore(outliersRemovedNotNormalized, feature1, 3)
+# outliersRemovedNotNormalized = removeOutliersByZScore(outliersRemovedNotNormalized, feature2, 3)
+# outliersRemovedNotNormalized = removeOutliersByZScore(outliersRemovedNotNormalized, feature3, 3)
+# set_normalized = expUtils.normalizeLabeledData(pd.DataFrame(set))
+# set_normalized = set_normalized.astype(float)
+# print(set_normalized)
+# set_normalized_labels = pd.DataFrame(set_normalized).get(['label'])
+# print(set_normalized_labels)
+# set_normalized.drop(columns=['label', 'userID'], inplace=True)
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors", kMeans_baseline, set_normalized_labels,  set_normalized)
+
+
+#with outliers removed
+set_complete_vectors = set
 feature1 = 'avgSeekTime'
 feature2 = 'avgHoldTime'
 feature3 = 'averageNgramTime'
-outliersRemovedNotNormalized = getColumnZScores(pd.DataFrame(outliersRemovedNotNormalized), feature1)
-outliersRemovedNotNormalized = getColumnZScores(pd.DataFrame(outliersRemovedNotNormalized), feature2)
-outliersRemovedNotNormalized = getColumnZScores(pd.DataFrame(outliersRemovedNotNormalized), feature3)
-outliersRemovedNotNormalized = removeOutliersByZScore(outliersRemovedNotNormalized, feature1, 3)
-outliersRemovedNotNormalized = removeOutliersByZScore(outliersRemovedNotNormalized, feature2, 3)
-outliersRemovedNotNormalized = removeOutliersByZScore(outliersRemovedNotNormalized, feature3, 3)
-outliersRemoved_prior2stdvs = expUtils.normalizeLabeledData(pd.DataFrame(outliersRemovedNotNormalized))
-outliersRemoved_prior2stdvs = outliersRemoved_prior2stdvs.astype(float)
-outliersRemoved2Stdvs_noNormal_labels = outliersRemoved_prior2stdvs.get(['label'])
 
-outliersRemoved_prior2stdvs.drop(columns=['label', 'num', 'userID'], inplace=True)
-print(outliersRemoved_prior2stdvs)
-runExperiment("jonstest7_Kmeans_baseline_OutliersRemovedPrev3Stdvs", kMeans_baseline, outliersRemoved2Stdvs_noNormal_labels,  outliersRemoved_prior2stdvs)
+set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature1)
+set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature2)
+set_complete_vectors = getColumnZScores(pd.DataFrame(set_complete_vectors), feature3)
+set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature1, 3)
+set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature2, 3)
+set_complete_vectors = removeOutliersByZScore(set_complete_vectors, feature3, 3)
+set_complete_vectors = expUtils.normalizeLabeledData(pd.DataFrame(set_complete_vectors))
+set_complete_vectors = set_complete_vectors.astype(float)
+set_complete_vectors_labels = pd.DataFrame(set_complete_vectors).get(['label'])
+set_complete_vectors.drop(columns=['label', 'userID'], inplace=True)
+runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved", kMeans_baseline, set_complete_vectors_labels,  set_complete_vectors)
+
+runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_highest_iters", kMeans_baseline_highest_iteration, set_complete_vectors_labels,  set_complete_vectors)
+
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_highest_iters_2_clusters", kMeans_baseline_highest_iteration_2_clusters, set_complete_vectors_labels,  set_complete_vectors)
+
+
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_2_clusters", kMeans_baseline_2_clusters, set_complete_vectors_labels,  set_complete_vectors)
+#
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_4_clusters", kMeans_baseline_4_clusters, set_complete_vectors_labels,  set_complete_vectors)
+#
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_3_clusters", kMeans_baseline_3_clusters, set_complete_vectors_labels,  set_complete_vectors)
+
+avgs_only = set_complete_vectors.get(['avgSeekTime', 'avgHoldTime', 'averageNgramTime'])
+runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_avgs_only", kMeans_baseline, set_complete_vectors_labels,  avgs_only)
+
+noAvgs = set_complete_vectors.drop(columns=['avgSeekTime', 'avgHoldTime', 'averageNgramTime'])
+runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_no_avgs", kMeans_baseline, set_complete_vectors_labels,  noAvgs)
+
+
+
 
 
 

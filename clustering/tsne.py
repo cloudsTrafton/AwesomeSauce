@@ -42,7 +42,7 @@ def makeTSNEPlot(featureSet, numClusters=6, experimentName = '', tsne_perplexity
             plots[age_group][cluster_num] = plt.scatter(d.x_tsne, d.y_tsne,
                                 s = 30,
                                 c = clustercolors[cluster_num],
-                                marker = markers[age_group])
+                                marker=markers[age_group], edgecolors="black")
 
     legend1 = plt.legend((plots[0][0], plots[1][0], plots[2][0], plots[3][0], plots[4][0], plots[5][0]), ('<15', '15-19', '20-29', '30-39', '40-49', '50+'), loc=1)
     plt.legend((plots[1][0], plots[1][1], plots[1][2], plots[1][3], plots[1][4], plots[1][5]), ('Cluster 1', 'Cluster 2', 'Cluster 3', 'Cluster 4', 'Cluster 5', 'Cluster 6'), loc=4)
@@ -52,9 +52,10 @@ def makeTSNEPlot(featureSet, numClusters=6, experimentName = '', tsne_perplexity
     if experimentName == '':
         experimentName = datetime.now().strftime("%m_%d_%y_%H_%M_%S_%f")
 
-    plt.savefig("./tsne/" + experimentName + ".png", dpi=600)
+    plt.savefig("../tsne/" + experimentName + ".png", dpi=600)
+    plt.close()
 
-    plt.show()
+    # plt.show()
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
@@ -62,7 +63,7 @@ pd.set_option('display.width', 1000)
 # Multi-clustering with labeled feature vectors
 
 # Retrieve the processed data set
-feature_set = dataUtils.retreiveDataSet("./feature_sets/jonstest8-completevectoronly.csv")
+feature_set = dataUtils.retreiveDataSet("../feature_sets/jonstest8-completevectoronly.csv")
 
 #Drop the label and ID column, since we dont want to include these in the clustering algorithm.
 feature_set_stripped = feature_set.copy()
