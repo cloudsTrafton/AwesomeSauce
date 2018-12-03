@@ -5,15 +5,34 @@ from data_processing import MulticlusteringExperimentUtils as expUtils
 # Keep the clustering experiments that involve outliers here
 from clustering.KMeansVariations import kMeans_baseline, kMeans_baseline_high_iteration, kMeans_baseline_random_init, \
     kMeans_baseline_4_clusters, kMeans_baseline_3_clusters, kMeans_baseline_2_clusters, kMeans_baseline_2_clusters_low_iter,\
-    kMeans_baseline_2_clusters_high_iter, kMeans_baseline_highest_iteration, kMeans_baseline_highest_iteration_2_clusters
+    kMeans_baseline_2_clusters_high_iter, kMeans_baseline_highest_iteration, kMeans_baseline_highest_iteration_2_clusters,\
+    kMeans_baseline_5_clusters, kMeans_baseline_3_clusters_random_high_iter, kMeans_baseline_3_clusters_random_med_iter
 
 from clustering.tsne import makeTSNEPlot
 import pandas as pd
 
 # --- Remove all of the outliers for the big features ----
 # average hold time
-from data_processing.CleanDataUtils import feature_set, feature_set_complete_vectors_only,feature_set_more_even_vectors
+from data_processing.CleanDataUtils import feature_set, feature_set_complete_vectors_only,feature_set_more_even_vectors, feature_set_3_labels_completeSamplesOnly,feature_set_3_labels_AllSamples, feature_set_4049_reduced
 from data_processing.dataUtils import getColumnZScores, removeOutliersByZScore
+
+
+def removeOutliersAndNormalizeData(feature_set_input, threshold):
+    feature1 = 'avgSeekTime'
+    feature2 = 'avgHoldTime'
+    feature3 = 'averageNgramTime'
+    feature_set_outliers_removed = feature_set_input
+    feature_set_outliers_removed = getColumnZScores(pd.DataFrame(feature_set_outliers_removed), feature1)
+    feature_set_outliers_removed = getColumnZScores(pd.DataFrame(feature_set_outliers_removed), feature2)
+    feature_set_outliers_removed = getColumnZScores(pd.DataFrame(feature_set_outliers_removed), feature3)
+    feature_set_outliers_removed = removeOutliersByZScore(feature_set_outliers_removed, feature1, threshold)
+    feature_set_outliers_removed = removeOutliersByZScore(feature_set_outliers_removed, feature2, threshold)
+    feature_set_outliers_removed = removeOutliersByZScore(feature_set_outliers_removed, feature3, threshold)
+    feature_set_outliers_removed = expUtils.normalizeLabeledData(pd.DataFrame(feature_set_outliers_removed))
+    feature_set_outliers_removed = feature_set_outliers_removed.astype(float)
+    feature_set_outliers_removed_labels = pd.DataFrame(feature_set_outliers_removed).get(['label'])
+    feature_set_outliers_removed.drop(columns=['label', 'userID'], inplace=True)
+    return feature_set_outliers_removed, feature_set_outliers_removed_labels
 
 
 
@@ -34,6 +53,32 @@ def runExperiment(expName, kmeans, labels, feature_set):
                               expName, labels)
 
 
+# set_combined_labels_completeOnly = feature_set_3_labels_completeSamplesOnly
+# normalized_completeOnly_combined, normalized_completeOnly_combined_labels = \
+#     removeOutliersAndNormalizeData(set_combined_labels_completeOnly, 3)
+# runExperiment("jonstest10_Kmeans_baseline_completeVectors_3Clusters", kMeans_baseline_3_clusters, normalized_completeOnly_combined_labels,  normalized_completeOnly_combined)
+#
+#
+# set_combined_labels_allSamples = feature_set_3_labels_AllSamples
+# normalized_set_combined_labels_allSamples, set_combined_labels_allSamples_labels = \
+#     removeOutliersAndNormalizeData(set_combined_labels_allSamples, 3)
+# runExperiment("jonstest10_Kmeans_baseline_AllSamples_3Clusters", kMeans_baseline_3_clusters, set_combined_labels_allSamples_labels,  normalized_set_combined_labels_allSamples)
+
+# runExperiment("jonstest10_Kmeans_baseline_completeVectors_3Clusters_randomInitMedIter", kMeans_baseline_3_clusters_random_med_iter, normalized_completeOnly_combined_labels,  normalized_completeOnly_combined)
+#
+# runExperiment("jonstest10_Kmeans_baseline_completeVectors_3Clusters_randomInitHighIter", kMeans_baseline_3_clusters_random_high_iter, normalized_completeOnly_combined_labels,  normalized_completeOnly_combined)
+#
+# runExperiment("jonstest9_Kmeans_baseline_AllSamples_3Clusters_randomInitMedIter", kMeans_baseline_3_clusters_random_med_iter, set_combined_labels_allSamples_labels,  normalized_set_combined_labels_allSamples)
+#
+# runExperiment("jonstest9_Kmeans_baseline_AllSamples_3Clusters_randomInitHighIter", kMeans_baseline_3_clusters_random_high_iter, set_combined_labels_allSamples_labels,  normalized_set_combined_labels_allSamples)
+
+middleage_reduced = feature_set_4049_reduced
+normalized_middleage_reduced, middleage_reduced_labels = \
+    removeOutliersAndNormalizeData(middleage_reduced, 3)
+
+# runExperiment("middleage_reduced_baseline", kMeans_baseline, middleage_reduced_labels,  normalized_middleage_reduced)
+
+# runExperiment("middleage_reduced_baseline", kMeans_baseline, middleage_reduced_labels,  normalized_middleage_reduced)
 
 
 set = feature_set_complete_vectors_only
@@ -71,10 +116,12 @@ feature3 = 'averageNgramTime'
 # set_complete_vectors_COPY = set_complete_vectors
 # set_complete_vectors_labels = pd.DataFrame(set_complete_vectors).get(['label'])
 # set_complete_vectors.drop(columns=['label', 'userID'], inplace=True)
-# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved", kMeans_baseline, set_complete_vectors_labels,  set_complete_vectors)
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_3clusters", kMeans_baseline_3_clusters, set_complete_vectors_labels,  set_complete_vectors)
 #
 # runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_highest_iters", kMeans_baseline_highest_iteration, set_complete_vectors_labels,  set_complete_vectors)
 
+
+#EXPERIMENT RUNS WITH ONLY COMPLETE VECTORS
 
 even_vectors = feature_set_more_even_vectors
 even_vectors = getColumnZScores(pd.DataFrame(even_vectors), feature1)
@@ -87,7 +134,9 @@ even_vectors = expUtils.normalizeLabeledData(pd.DataFrame(even_vectors))
 even_vectors = even_vectors.astype(float)
 even_vectors_labels = pd.DataFrame(even_vectors).get(['label'])
 even_vectors.drop(columns=['label', 'userID'], inplace=True)
-runExperiment("evenVectors_Kmeans_baseline_completeVectors_outliersRemoved", kMeans_baseline, even_vectors_labels,  even_vectors)
+
+
+runExperiment("evenVectors_Kmeans_baseline_completeVectors_outliersRemoved_3_clusters_high_iter_random", kMeans_baseline_3_clusters_random_high_iter, even_vectors_labels,  even_vectors)
 
 
 
@@ -109,8 +158,8 @@ runExperiment("evenVectors_Kmeans_baseline_completeVectors_outliersRemoved", kMe
 # runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_3_clusters", kMeans_baseline_3_clusters, set_complete_vectors_labels,  set_complete_vectors)
 
 # avgs_only = set_complete_vectors.get(['avgSeekTime', 'avgHoldTime', 'averageNgramTime'])
-# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_avgs_only", kMeans_baseline, set_complete_vectors_labels,  avgs_only)
-#
+# runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_avgs_only_2stdsvs", kMeans_baseline, set_complete_vectors_labels,  avgs_only)
+# #
 # noAvgs = set_complete_vectors.drop(columns=['avgSeekTime', 'avgHoldTime', 'averageNgramTime'])
 # runExperiment("jonstest8_Kmeans_baseline_completeVectors_outliersRemoved_no_avgs", kMeans_baseline, set_complete_vectors_labels,  noAvgs)
 
@@ -173,12 +222,13 @@ runExperiment("evenVectors_Kmeans_baseline_completeVectors_outliersRemoved", kMe
 # z_scored_no_seekTime = removeOutliersByZScore(z_scored_no_seekTime, feature2, 3)
 # z_scored_no_seekTime = removeOutliersByZScore(z_scored_no_seekTime, feature3, 3)
 # labels_z_score_no_seekTime = z_scored_no_seekTime.get(['label'])
+
 # z_scored_no_seekTime = z_scored_no_seekTime.drop(columns=['label', 'num', 'userID', 'avgSeekTime', 'avgSeekTime_zscore'])
 
 
 
 
-#automated runs with function - WILL RUN
+#EXPERIMENT RUNS WITH INCOMPLETE DATA REPLACED WITH THE AVERAGES FOR THE FEATURE
 
 
 #Experiment with the seek time removed
@@ -201,7 +251,6 @@ runExperiment("evenVectors_Kmeans_baseline_completeVectors_outliersRemoved", kMe
 # runExperiment("jonstest7_Kmeans_baseline_noAvgs", kMeans_baseline, normalizedLabeledDataLabels, normalizedLabeledData_noAvgs)
 
 # Removing outliers from the dataset in the most powerful features
-print()
 # runExperiment("jonstest7_Kmeans_baseline", kMeans_baseline, normalizedLabeledDataLabels, normalizedLabeledDataDroppedCols)
 # runExperiment("jonstest7_Kmeans_baseline_outliers_removed", kMeans_baseline,labels_z_score, normalizedLabeledData_allFeatures)
 # runExperiment("jonstest7_Kmeans_baseline_outliers_removed_random_init", kMeans_baseline_random_init,labels_z_score, normalizedLabeledData_allFeatures)

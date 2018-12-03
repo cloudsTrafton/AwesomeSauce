@@ -19,10 +19,18 @@ kMeans_baseline_highest_iteration_2_clusters = KMeans(init='k-means++', n_cluste
 kMeans_baseline_random_init = KMeans(init='random', n_clusters=6, n_init=120, max_iter=500, tol=1e-04, random_state=1)
 
 # KMeans clustering with only four clusters
+kMeans_baseline_5_clusters = KMeans(init='k-means++', n_clusters=5, n_init=120, max_iter=500, tol=1e-04, random_state=1)
+
+# KMeans clustering with only four clusters
 kMeans_baseline_4_clusters = KMeans(init='k-means++', n_clusters=4, n_init=120, max_iter=500, tol=1e-04, random_state=1)
 
 # KMeans clustering with only 3 clusters
 kMeans_baseline_3_clusters = KMeans(init='k-means++', n_clusters=3, n_init=120, max_iter=500, tol=1e-04, random_state=1)
+
+# KMeans clustering with only 3 clusters
+kMeans_baseline_3_clusters_random_med_iter = KMeans(init='random', n_clusters=3, n_init=150, max_iter=500, tol=1e-04, random_state=1)
+
+kMeans_baseline_3_clusters_random_high_iter = KMeans(init='random', n_clusters=3, n_init=120, max_iter=1000, tol=1e-04, random_state=1)
 
 # Base Kmeans with only two clusters
 kMeans_baseline_2_clusters = KMeans(init='k-means++', n_clusters=2, n_init=120, max_iter=500, tol=1e-04, random_state=1)
