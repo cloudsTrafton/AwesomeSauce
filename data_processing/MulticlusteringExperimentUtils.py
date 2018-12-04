@@ -68,6 +68,75 @@ def getClusterBucketsForMultiClustering(labels, result):
 
     return cluster1, cluster2, cluster3, cluster4, cluster5, cluster6
 
+def getF1Score(cluster1, cluster2, cluster3, cluster4, cluster5, cluster6, experimentName):
+
+    if(len(cluster1) != 0):
+        cluster1_mostFreq = max(cluster1, key=cluster1.count)
+        exp_cluster1 = []
+        for item in cluster1:
+            exp_cluster1.append(cluster1_mostFreq)
+        fscore_cluster1 = f1_score(exp_cluster1, cluster1, average='weighted')
+    else:
+        fscore_cluster1 = 0
+
+    if(len(cluster2) != 0):
+        cluster2_mostFreq = max(cluster2, key=cluster2.count)
+        exp_cluster2 = []
+        for item in cluster2:
+            exp_cluster2.append(cluster2_mostFreq)
+        fscore_cluster2 = f1_score(exp_cluster2, cluster2, average='weighted')
+    else:
+        fscore_cluster2 = 0
+
+    if (len(cluster3) != 0):
+        cluster3_mostFreq = max(cluster3, key=cluster3.count)
+        exp_cluster3 = []
+        for item in cluster3:
+            exp_cluster3.append(cluster3_mostFreq)
+        fscore_cluster3 = f1_score(exp_cluster3, cluster3, average='weighted')
+    else:
+        fscore_cluster3 = 0
+
+    if (len(cluster4) != 0):
+        cluster4_mostFreq = max(cluster4, key=cluster4.count)
+        exp_cluster4 = []
+        for item in cluster4:
+            exp_cluster4.append(cluster4_mostFreq)
+        fscore_cluster4 = f1_score(exp_cluster4, cluster4, average='weighted')
+    else:
+        fscore_cluster4 = 0
+
+    if (len(cluster5) != 0):
+        cluster5_mostFreq = max(cluster5, key=cluster5.count)
+        exp_cluster5 = []
+        for item in cluster5:
+            exp_cluster5.append(cluster5_mostFreq)
+        fscore_cluster5 = f1_score(exp_cluster5, cluster5, average='weighted')
+    else:
+        fscore_cluster5 = 0
+
+    if (len(cluster6) != 0):
+        cluster6_mostFreq = max(cluster6, key=cluster6.count)
+        exp_cluster6 = []
+        for item in cluster6:
+            exp_cluster6.append(cluster6_mostFreq)
+        fscore_cluster6 = f1_score(exp_cluster6, cluster6, average='weighted')
+    else:
+        fscore_cluster6 = 0
+
+
+    clusters = 6
+
+    avgFScore = (fscore_cluster1 + fscore_cluster2 + fscore_cluster3 +
+                 fscore_cluster4 + fscore_cluster5 + fscore_cluster6) / float(clusters)
+
+
+    output = open("../PrecisionRecallScores/F1_Scores.csv", "a")
+
+    # write the header
+    output.write("\n" + str(experimentName) + "," + str(fscore_cluster1)+  "," +str(fscore_cluster2)+  "," +str(fscore_cluster3)+  "," +str(fscore_cluster4)+  "," +str(fscore_cluster5)+  "," +str(fscore_cluster6)+  "," +str(avgFScore))
+
+
 
 
 def getAveragesPerLabelForMultiClustering(clusterValues, clusterNumber, outputFileName, labels):
@@ -128,8 +197,6 @@ def getAveragesPerLabelForMultiClustering(clusterValues, clusterNumber, outputFi
         calculatePercentOfDataPointsInCluster(labels, num_15_below, num_16_19, num20_29, num30_39, num40_49,
                                               num50_plus)
 
-
-    # def getOutputStr(clusterNumber, label, numDataPoints, percent_cluster, num_data, percent_data_set)
     output_str1 = getOutputStr(clusterNumber,"15 below", numDataPoints, percent_15_below,
                    num_15_below,percent_15_below_ds)
     output_str2 = getOutputStr(clusterNumber,"16-19", numDataPoints, percent_16_19,
